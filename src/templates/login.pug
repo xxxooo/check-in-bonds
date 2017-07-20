@@ -1,0 +1,13 @@
+template#viewLogin
+  div(v-if='auth.currentUser')
+    router-link.mdl-button.mdl-js-button(to='logout') Sign Out
+  .mdl-card.mdl-shadow--4dp(v-else)
+    .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+      input#email.mdl-textfield__input(type='text', v-model='user.email')
+      label.mdl-textfield__label(for='email') email
+    .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+      input#password.mdl-textfield__input(type='password', v-model='user.pass')
+      label.mdl-textfield__label(for='password') password
+    .mdl-color-text--pink-A400(v-text='message')
+    #signIn
+      button.mdl-button.mdl-js-button(@click='signIn') Sign In

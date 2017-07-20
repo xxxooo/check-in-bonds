@@ -1,0 +1,13 @@
+
+#app.container
+  .page-header
+    h1
+      | Vue.js 2 & Firebase example
+    div(v-if='auth.currentUser')
+      router-link(to='/logout') Sign Out
+    div(v-else)
+      router-link(to='/login') Sign In
+    div
+      router-link(to='/bonds') Bonds
+    hr
+    router-view

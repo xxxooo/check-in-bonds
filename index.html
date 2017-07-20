@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.min.css">
+    <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.1/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuefire/1.4.3/vuefire.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.7.0/vue-router.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="db/firebase.js"></script>
+    <script src="js/components/main.js"></script>
+    <script src="js/components/login.js"></script>
+    <script src="js/components/bonds.js"></script>
+    <title>Check in bounds</title>
+  </head>
+  <body>
+    <template id="viewLogin">
+      <div v-if="auth.currentUser">
+        <router-link class="mdl-button mdl-js-button" to="logout">Sign Out</router-link>
+      </div>
+      <div class="mdl-card mdl-shadow--4dp" v-else>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" id="email" type="text" v-model="user.email">
+          <label class="mdl-textfield__label" for="email">email</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" id="password" type="password" v-model="user.pass">
+          <label class="mdl-textfield__label" for="password">password</label>
+        </div>
+        <div class="mdl-color-text--pink-A400" v-text="message"></div>
+        <div id="signIn">
+          <button class="mdl-button mdl-js-button" @click="signIn">Sign In</button>
+        </div>
+      </div>
+    </template>
+    <template id="indexBonds">
+      <div>
+        <div>
+          <router-link to="/logout">Sign Out</router-link>
+          <router-link :to="{ name: 'new-bond' }">add new bond</router-link>
+        </div>
+        <div>
+          <div>
+            <h3>Bond List</h3>
+          </div>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Info</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="bond in bonds">
+                  <td>
+                    <router-link :to="{ name: 'view-bond', params: { id: bond['.key'] }}"><i class="fa fa-cube"></i></router-link>
+                  </td>
+                  <td><a>{{bond.name}}</a></td>
+                  <td>{{bond.email}}</td>
+                  <td>{{bond.info}}</td>
+                  <td>
+                    <router-link :to="{ name: 'delete-bond', params: { id: bond['.key'] }}"><i class="fa fa-trash"></i></router-link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template id="addBond">
+      <div>
+        <div>
+          <h3>Add New Bond</h3>
+        </div>
+        <div>
+          <form v-on:submit.prevent="addBond">
+            <div>
+              <label for="bondName">Name:</label>
+              <input id="bondName" type="text" v-model="newBond.name">
+            </div>
+            <div>
+              <label for="bondEmail">Email:</label>
+              <input id="bondEmail" type="text" v-model="newBond.email">
+            </div>
+            <div>
+              <label for="bondInfo">Info:</label>
+              <input id="bondInfo" type="text" v-model="newBond.info">
+            </div>
+            <input type="submit" value="Add Bond">
+          </form>
+        </div>
+      </div>
+    </template>
+    <template id="viewBook">
+      <div>
+        <h3>View Bond</h3>
+      </div>
+      <div>
+        <table>
+          <tbody>
+            <tr v-for="(value, key) in bond">
+              <td v-text="key"></td>
+              <td v-text="value"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <template id="editBook">
+      <div>
+        <h3>Edit Bond</h3>
+      </div>
+      <div>
+        <table>
+          <tbody>
+            <tr v-for="(value, key) in bond">
+              <td v-text="key"></td>
+              <td v-text="value"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+    <div class="container" id="app">
+      <div class="page-header">
+        <h1>Vue.js 2 & Firebase example</h1>
+        <div v-if="auth.currentUser">
+          <router-link to="/logout">Sign Out</router-link>
+        </div>
+        <div v-else>
+          <router-link to="/login">Sign In</router-link>
+        </div>
+        <div>
+          <router-link to="/bonds">Bonds</router-link>
+        </div>
+        <hr>
+        <router-view></router-view>
+      </div>
+    </div>
+    <script src="js/router.js"></script>
+    <script src="js/index.js"></script>
+  </body>
+</html>

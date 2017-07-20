@@ -1,0 +1,21 @@
+extends ./src/shared/layout.pug
+
+block styles_and_scripts
+  include ./src/shared/styles_and_scripts.pug
+  link(rel="stylesheet", href="css/style.css")
+  script(src="db/firebase.js")
+  script(src="js/components/main.js")
+  script(src="js/components/login.js")
+  script(src="js/components/bonds.js")
+
+block bottom_scripts
+  script(src="js/router.js")
+  script(src="js/index.js")
+
+block title
+  title Check in bounds
+
+block body_content
+  include ./src/templates/login.pug
+  include ./src/templates/bonds.pug
+  include ./src/main.pug

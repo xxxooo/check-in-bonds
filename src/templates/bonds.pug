@@ -1,0 +1,67 @@
+template#indexBonds
+  div
+    div
+      router-link(to='/logout') Sign Out
+      router-link(:to="{ name: 'new-bond' }") add new bond
+    
+    div
+      div
+        h3 Bond List
+      div
+        table
+          thead
+            tr
+              th
+              th Name
+              th Email
+              th Info
+              th
+          tbody
+            tr(v-for='bond in bonds')
+              td
+                router-link(:to="{ name: 'view-bond', params: { id: bond['.key'] }}")
+                  i.fa.fa-cube
+              td
+                a {{bond.name}}
+              td {{bond.email}}
+              td {{bond.info}}
+              td
+                router-link(:to="{ name: 'delete-bond', params: { id: bond['.key'] }}")
+                  i.fa.fa-trash
+
+template#addBond
+  div
+    div
+      h3 Add New Bond
+    div
+      form(v-on:submit.prevent='addBond')
+        div
+          label(for='bondName') Name:
+          input#bondName(type='text', v-model='newBond.name')
+        div
+          label(for='bondEmail') Email:
+          input#bondEmail(type='text', v-model='newBond.email')
+        div
+          label(for='bondInfo') Info:
+          input#bondInfo(type='text', v-model='newBond.info')
+        input(type='submit', value='Add Bond')
+
+template#viewBook
+  div
+    h3 View Bond
+  div
+    table
+      tbody
+        tr(v-for='(value, key) in bond')
+          td(v-text='key')
+          td(v-text='value')
+
+template#editBook
+  div
+    h3 Edit Bond
+  div
+    table
+      tbody
+        tr(v-for='(value, key) in bond')
+          td(v-text='key')
+          td(v-text='value')

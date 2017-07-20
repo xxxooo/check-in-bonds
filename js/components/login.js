@@ -1,0 +1,46 @@
+const appLogin = {
+  template: '#viewLogin',
+
+  data () {
+    return {
+      user: {
+        email: '',
+        password: ''
+      },
+      auth: {},
+      message: ''
+    }
+  },
+
+  methods: {
+    checkAuth: function () {
+      if(this.auth.currentUser) {
+        this.$router.push('/')
+      }
+    },
+    signIn: function () {
+      this.auth.signInWithEmailAndPassword(this.user.email, this.user.pass)
+        .then(() => { this.message = '' })
+        .catch(e => {
+          this.message = e.message
+        })
+    }
+  },
+
+  created () {
+    this.auth = firebase.auth()
+    this.auth.onAuthStateChanged((user) => {
+      this.$forceUpdate()
+      this.checkAuth()
+    })
+  }
+}
+
+const appLogout = {
+  template: 'Logout',
+
+  created () {
+    firebase.auth().signOut()
+    this.$router.push('/')
+  }
+}
