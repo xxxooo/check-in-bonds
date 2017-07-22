@@ -15,11 +15,11 @@ const appLogin = {
   methods: {
     checkAuth: function () {
       if(this.auth.currentUser) {
-        this.$router.push('/')
+        this.$router.push('/bonds')
       }
     },
     signIn: function () {
-      this.auth.signInWithEmailAndPassword(this.user.email, this.user.pass)
+      this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
         .then(() => { this.message = '' })
         .catch(e => {
           this.message = e.message
@@ -37,7 +37,7 @@ const appLogin = {
 }
 
 const appLogout = {
-  template: 'Logout',
+  template: '<p>Logout</p>',
 
   created () {
     firebase.auth().signOut()

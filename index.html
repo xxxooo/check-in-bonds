@@ -18,60 +18,67 @@
   </head>
   <body>
     <template id="viewLogin">
-      <div v-if="auth.currentUser">
-        <router-link class="mdl-button mdl-js-button" to="logout">Sign Out</router-link>
-      </div>
-      <div class="mdl-card mdl-shadow--4dp" v-else>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" id="email" type="text" v-model="user.email">
-          <label class="mdl-textfield__label" for="email">email</label>
-        </div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" id="password" type="password" v-model="user.pass">
-          <label class="mdl-textfield__label" for="password">password</label>
-        </div>
-        <div class="mdl-color-text--pink-A400" v-text="message"></div>
-        <div id="signIn">
-          <button class="mdl-button mdl-js-button" @click="signIn">Sign In</button>
+      <div class="section">
+        <div class="columns">
+          <div class="column"></div>
+          <div class="column">
+            <h1 class="title has-text-centered">Sign in</h1>
+            <div class="field">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-medium" type="email" placeholder="email" v-model="user.email"><span class="icon is-left"><i class="fa fa-envelope"></i></span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-medium" type="password" placeholder="password" v-model="user.password"><span class="icon is-left"><i class="fa fa-lock"></i></span>
+              </div>
+            </div>
+            <div class="notification" v-if="message">
+              <button class="delete" @click="message=''"></button><span>{{message}}</span>
+            </div>
+            <div class="has-text-centered" id="signIn"><a class="button is-primary" @click="signIn">Sign In</a></div>
+          </div>
+          <div class="column"></div>
         </div>
       </div>
     </template>
     <template id="indexBonds">
-      <div>
-        <div>
-          <router-link to="/logout">Sign Out</router-link>
-          <router-link :to="{ name: 'new-bond' }">add new bond</router-link>
+      <div class="section">
+        <div class="block">
+          <h3 class="title is-pulled-left">訂單列表</h3>
+          <router-link class="button is-primary" :to="{ name: 'new-bond' }"><i class="fa fa-plus"></i></router-link>
+          <router-link class="button is-pulled-right" to="/logout">登出</router-link>
         </div>
         <div>
-          <div>
-            <h3>Bond List</h3>
-          </div>
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Info</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="bond in bonds">
-                  <td>
-                    <router-link :to="{ name: 'view-bond', params: { id: bond['.key'] }}"><i class="fa fa-cube"></i></router-link>
-                  </td>
-                  <td><a>{{bond.name}}</a></td>
-                  <td>{{bond.email}}</td>
-                  <td>{{bond.info}}</td>
-                  <td>
-                    <router-link :to="{ name: 'delete-bond', params: { id: bond['.key'] }}"><i class="fa fa-trash"></i></router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>資訊</th>
+                <th>email</th>
+                <th>電話</th>
+                <th>匯款號碼</th>
+                <th>匯款時間</th>
+                <th>確認匯款</th>
+                <th>報到</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="bond in bonds">
+                <td>
+                  <router-link :to="{ name: 'view-bond', params: { id: bond['.key'] }}">{{bond.name}}</router-link>
+                </td>
+                <td>{{bond.info}}</td>
+                <td>{{bond.email}}</td>
+                <td>{{bond.phone}}</td>
+                <td>{{bond.code}}</td>
+                <td>{{bond.commitTime}}</td>
+                <td>{{bond.phone}}</td>
+                <td><i class="check" v-if="bond.checked"></i></td>
+                <td><i class="check" v-if="bond.checkIn"></i></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </template>
@@ -129,22 +136,20 @@
         </table>
       </div>
     </template>
-    <div class="container" id="app">
-      <div class="page-header">
-        <h1>Vue.js 2 & Firebase example</h1>
-        <div v-if="auth.currentUser">
-          <router-link to="/logout">Sign Out</router-link>
-        </div>
-        <div v-else>
-          <router-link to="/login">Sign In</router-link>
-        </div>
-        <div>
-          <router-link to="/bonds">Bonds</router-link>
-        </div>
-        <hr>
+    <div id="app">
+      <div class="container">
         <router-view></router-view>
       </div>
     </div>
+    <template id="viewMain">
+      <div class="section">
+        <h1 class="title has-text-centered">Hello!</h1>
+        <div class="title has-text-centered">
+          <router-link class="button" v-if="auth.currentUser" to="/bonds">看訂單</router-link>
+          <router-link class="button" v-else to="/login">登入</router-link>
+        </div>
+      </div>
+    </template>
     <script src="js/router.js"></script>
     <script src="js/index.js"></script>
   </body>

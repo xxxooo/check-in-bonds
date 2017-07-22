@@ -13,7 +13,7 @@ const initBond = {
   info: '',
   email: '',
   phone: '',
-  number: '',
+  code: '',
   commitTime: '',
   checked: false,
   checkIn: false

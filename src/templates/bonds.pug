@@ -1,33 +1,37 @@
 template#indexBonds
-  div
-    div
-      router-link(to='/logout') Sign Out
-      router-link(:to="{ name: 'new-bond' }") add new bond
+  .section
+    .block
+      h3.title.is-pulled-left 訂單列表
+      router-link.button.is-primary(:to="{ name: 'new-bond' }")
+          i.fa.fa-plus
+      router-link.button.is-pulled-right(to='/logout') 登出
     
     div
-      div
-        h3 Bond List
-      div
-        table
-          thead
-            tr
-              th
-              th Name
-              th Email
-              th Info
-              th
-          tbody
-            tr(v-for='bond in bonds')
-              td
-                router-link(:to="{ name: 'view-bond', params: { id: bond['.key'] }}")
-                  i.fa.fa-cube
-              td
-                a {{bond.name}}
-              td {{bond.email}}
-              td {{bond.info}}
-              td
-                router-link(:to="{ name: 'delete-bond', params: { id: bond['.key'] }}")
-                  i.fa.fa-trash
+      table.table
+        thead
+          tr
+            th 姓名
+            th 資訊
+            th email
+            th 電話
+            th 匯款號碼
+            th 匯款時間
+            th 確認匯款
+            th 報到
+        tbody
+          tr(v-for='bond in bonds')
+            td
+              router-link(:to="{ name: 'view-bond', params: { id: bond['.key'] }}") {{bond.name}}
+            td {{bond.info}}
+            td {{bond.email}}
+            td {{bond.phone}}
+            td {{bond.code}}
+            td {{bond.commitTime}}
+            td {{bond.phone}}
+            td
+              i.check(v-if='bond.checked')
+            td
+              i.check(v-if='bond.checkIn')
 
 template#addBond
   div
