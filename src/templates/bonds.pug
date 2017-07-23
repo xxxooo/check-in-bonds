@@ -2,7 +2,6 @@ template#indexBonds
   .section
     .block
       h2.title.is-pulled-left 票卷列表
-      //- router-link.button.is-primary(:to="{ name: 'new-bond' }")
       a.button.is-primary(@click='adding')
           i.fa.fa-plus
       router-link.button.is-pulled-right(to='/logout') 登出
@@ -41,7 +40,7 @@ template#indexBonds
               a
                 i.fa.fa-qrcode
 
-    edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
+    edit-bond-modal(:origin='pickedBond', ref='edit-bond-modal')
 
 template#editBondModal
   .modal(:class="{'is-active' : isOpen}")
@@ -94,6 +93,13 @@ template#editBondModal
               label.switch
                 input(type='checkbox' v-model='bond.checkIn')
                 .slider
-            .column
-              a.button.is-primary(@click='submit') {{isNew ? '新增' : '儲存'}}
-              a.button(@click='isOpen = false') 取消
+          .notification(v-if='message')
+            button.delete(@click="message=''")
+            span {{message}}
+          .box-foot
+            template(v-if='isNew')
+              a.button.is-primary(@click='create') 新增
+            template(v-else)
+              a.button.is-danger(@click='deleting') 刪除
+              a.button.is-primary(@click='update') 儲存
+            a.button(@click='isOpen = false') 取消

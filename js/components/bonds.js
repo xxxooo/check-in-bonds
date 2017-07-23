@@ -1,13 +1,4 @@
 
-// function clone(obj) {
-//     if (null == obj || "object" != typeof obj) return obj;
-//     var copy = obj.constructor();
-//     for (var attr in obj) {
-//         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-//     }
-//     return copy;
-// }
-
 const initBond = {
   name: '',
   info: '',
@@ -49,13 +40,7 @@ const bondsIndex = {
     editing (bond) {
       this.pickedBond = bond
       this.$refs['edit-bond-modal'].isOpen = true
-    },
-    addBond () {
-      if (this.newBond.name.length > 0) {
-        BondsRef.push(this.newBond)
-        this.newBond = initBond
-      }
-    },
+    }
   },
 
   created () {
@@ -69,11 +54,13 @@ const bondsIndex = {
 Vue.component('edit-bond-modal', {
   template: '#editBondModal',
 
-  props: ['bond'],
+  props: ['origin'],
 
   data () {
     return {
-      isOpen: false
+      isOpen: false,
+      bond: {},
+      message: ''
     }
   },
 
@@ -83,9 +70,37 @@ Vue.component('edit-bond-modal', {
     }
   },
 
+  watch: {
+    isOpen (val) {
+      this.bond = val ? JSON.parse(JSON.stringify(this.origin)) : {}
+    }
+  },
+
   methods: {
-    submit () {
-      console.log(this.bond)
+    create () {
+      if (this.bond.name.length > 0) {
+        BondsRef.push(this.bond, (error) => {
+          console.log(error)
+        })
+        this.isOpen = false
+      } else {
+        this.message = '請輸入姓名'
+      }
+    },
+    update () {
+      if (this.bond.name.length > 0) {
+        BondsRef.child(this.bond['.key']).update(this.bond, (error) => {
+          console.log(error)
+        })
+      } else {
+        this.message = '請輸入姓名'
+      }
+    },
+    deleting () {
+      let msg = '是否要刪除這張票卷？'
+      if (confirm(msg)) {
+        BondsRef.child(this.bond['.key']).remove()
+      }
     }
   },
 })
