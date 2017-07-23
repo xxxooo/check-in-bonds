@@ -3,8 +3,8 @@ template#viewLogin
     .columns
       .column
       .column
-        h1.title.has-text-centered
-          | Sign in
+        h2.title.has-text-centered
+          | 請登入
         .field
           .control.has-icons-left.has-icons-right
             input.input.is-medium(type='email', placeholder="email", v-model='user.email')
@@ -19,5 +19,5 @@ template#viewLogin
           button.delete(@click="message=''")
           span {{message}}
         #signIn.has-text-centered
-          a.button.is-primary(@click='signIn') Sign In
+          a.button.is-primary(@click='signIn') 登入
       .column

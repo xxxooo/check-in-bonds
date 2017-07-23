@@ -1,9 +1,9 @@
 template#indexBonds
   .section
     .block
-      h2.title.is-pulled-left 訂單列表
+      h2.title.is-pulled-left 票卷列表
       //- router-link.button.is-primary(:to="{ name: 'new-bond' }")
-      a.button.is-primary(@click='isAdding = true')
+      a.button.is-primary(@click='adding')
           i.fa.fa-plus
       router-link.button.is-pulled-right(to='/logout') 登出
 
@@ -11,6 +11,7 @@ template#indexBonds
       table.table
         thead
           tr
+            th
             th 姓名
             th 資訊
             th email
@@ -19,8 +20,12 @@ template#indexBonds
             th 匯款時間
             th 確認匯款
             th 報到
+            th
         tbody
           tr(v-for='bond in bonds')
+            td
+              a
+                i.fa.fa-pencil(@click='editing(bond)')
             td
               router-link(:to="{ name: 'view-bond', params: { id: bond['.key'] }}") {{bond.name}}
             td {{bond.info}}
@@ -28,78 +33,67 @@ template#indexBonds
             td {{bond.phone}}
             td {{bond.code}}
             td {{bond.commitTime}}
-            td {{bond.phone}}
             td
-              i.check(v-if='bond.checked')
+              i.fa.fa-check(v-if='bond.checked')
             td
-              i.check(v-if='bond.checkIn')
+              i.fa.fa-check(v-if='bond.checkIn')
+            td
+              a
+                i.fa.fa-qrcode
 
-    .modal(:class="{'is-active' : isAdding}")
-      .modal-background
-      .modal-content
-        .box
-          .content
-            h3.modal-card-title 新增訂單
-            .columns
-              .column
-                .control.has-icons-left
-                  input.input(type='text', placeholder="name", v-model='newBond.name')
-                  span.icon.is-left
-                    i.fa.fa-user
-              .column
-                .control.has-icons-left
-                  input.input(type='text', placeholder="info", v-model='newBond.info')
-                  span.icon.is-left
-                    i.fa.fa-lock
-            .columns
-              .column
-                .control.has-icons-left
-                  input.input(type='text', placeholder="email", v-model='newBond.email')
-                  span.icon.is-left
-                    i.fa.fa-envelope
-              .column
-                .control.has-icons-left
-                  input.input(type='text', placeholder="phone", v-model='newBond.phone')
-                  span.icon.is-left
-                    i.fa.fa-phone
-          .box-foot
-            a.button.is-primary 確認新增
-            a.button(@click='isAdding = false') 取消
+    edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
 
-
-template#addBond
-  .section
-    .block
-      h3.title Add New Bond
-    .columns
-      form(v-on:submit.prevent='addBond')
-        div
-          label(for='bondName') Name:
-          input#bondName(type='text', v-model='newBond.name')
-        div
-          label(for='bondEmail') Email:
-          input#bondEmail(type='text', v-model='newBond.email')
-        div
-          label(for='bondInfo') Info:
-          input#bondInfo(type='text', v-model='newBond.info')
-        input(type='submit', value='Add Bond')
-
-template#viewBook
-  div
-    h3 View Bond
-  div
-    table
-      tbody
-        tr(v-for='(value, key) in bond')
-          td(v-text='key')
-          td(v-text='value')
-
-template#editBook
-  div
-    h3 Edit Bond
-  div
-    table
-      tbody
-        tr(v-for='(value, key) in bond')
-          td(v-text='key')
-          td(v-text='value')
+template#editBondModal
+  .modal(:class="{'is-active' : isOpen}")
+    .modal-background
+    .modal-content.has-text-centered
+      .box
+        .content
+          h3.modal-card-title {{isNew ? '新增票卷' : '編輯票卷'}}
+          .columns
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder='姓名', v-model='bond.name')
+                span.icon.is-left
+                  i.fa.fa-user
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder='資訊', v-model='bond.info')
+                span.icon.is-left
+                  i.fa.fa-lock
+          .columns
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder='email', v-model='bond.email')
+                span.icon.is-left
+                  i.fa.fa-envelope
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder='電話', v-model='bond.phone')
+                span.icon.is-left
+                  i.fa.fa-phone
+          .columns
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder='帳號末五碼', v-model='bond.code')
+                span.icon.is-left
+                  i.fa.fa-credit-card
+            .column
+              .control.has-icons-left
+                input.input(type='text', placeholder="匯款時間", v-model='bond.commitTime')
+                span.icon.is-left
+                  i.fa.fa-clock-o
+          .columns
+            .column
+              span 付款
+              label.switch
+                input(type='checkbox' v-model='bond.checked')
+                .slider
+            .column
+              span 報到
+              label.switch
+                input(type='checkbox' v-model='bond.checkIn')
+                .slider
+            .column
+              a.button.is-primary(@click='submit') {{isNew ? '新增' : '儲存'}}
+              a.button(@click='isOpen = false') 取消

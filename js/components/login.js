@@ -13,12 +13,12 @@ const appLogin = {
   },
 
   methods: {
-    checkAuth: function () {
+    checkAuth () {
       if(this.auth.currentUser) {
         this.$router.push('/bonds')
       }
     },
-    signIn: function () {
+    signIn () {
       this.auth.signInWithEmailAndPassword(this.user.email, this.user.password)
         .then(() => { this.message = '' })
         .catch(e => {

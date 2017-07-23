@@ -8,5 +8,5 @@ template#viewMain
     h1.title.has-text-centered
       | Hello!
     .title.has-text-centered
-      router-link.button(v-if='auth.currentUser', to='/bonds') 看訂單
+      router-link.button(v-if='auth.currentUser', to='/bonds') 看票卷
       router-link.button(v-else, to='/login') 登入
