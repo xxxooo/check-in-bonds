@@ -29,10 +29,29 @@ const bondsIndex = {
     bonds: BondsRef
   },
 
-  created () {
-    if(!firebase.auth().currentUser) {
-      this.$router.push('/login')
+  data () {
+    return {
+      isAdding: false,
+      newBond: initBond
     }
+  },
+
+  methods: {
+    checkAuth: function () {
+      if(!firebase.auth().currentUser) {
+        this.$router.push('/login')
+      }
+    },
+    addBond: function () {
+      if (this.newBond.name.length > 0) {
+        BondsRef.push(this.newBond)
+        this.newBond = initBond
+      }
+    },
+  },
+
+  created () {
+    this.checkAuth()
   }
 }
 
@@ -149,3 +168,16 @@ const deleteBond = {
     this.$router.push('/bonds')
   }
 }
+
+//
+// 編輯 Bond 表單 modal
+//
+Vue.component('edit-bond-modal', {
+  template: '#editBondModal',
+
+  props: ['bond'],
+
+  methods: {
+    
+  },
+})

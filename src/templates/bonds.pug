@@ -1,11 +1,12 @@
 template#indexBonds
   .section
     .block
-      h3.title.is-pulled-left 訂單列表
-      router-link.button.is-primary(:to="{ name: 'new-bond' }")
+      h2.title.is-pulled-left 訂單列表
+      //- router-link.button.is-primary(:to="{ name: 'new-bond' }")
+      a.button.is-primary(@click='isAdding = true')
           i.fa.fa-plus
       router-link.button.is-pulled-right(to='/logout') 登出
-    
+
     div
       table.table
         thead
@@ -33,11 +34,44 @@ template#indexBonds
             td
               i.check(v-if='bond.checkIn')
 
+    .modal(:class="{'is-active' : isAdding}")
+      .modal-background
+      .modal-content
+        .box
+          .content
+            h3.modal-card-title 新增訂單
+            .columns
+              .column
+                .control.has-icons-left
+                  input.input(type='text', placeholder="name", v-model='newBond.name')
+                  span.icon.is-left
+                    i.fa.fa-user
+              .column
+                .control.has-icons-left
+                  input.input(type='text', placeholder="info", v-model='newBond.info')
+                  span.icon.is-left
+                    i.fa.fa-lock
+            .columns
+              .column
+                .control.has-icons-left
+                  input.input(type='text', placeholder="email", v-model='newBond.email')
+                  span.icon.is-left
+                    i.fa.fa-envelope
+              .column
+                .control.has-icons-left
+                  input.input(type='text', placeholder="phone", v-model='newBond.phone')
+                  span.icon.is-left
+                    i.fa.fa-phone
+          .box-foot
+            a.button.is-primary 確認新增
+            a.button(@click='isAdding = false') 取消
+
+
 template#addBond
-  div
-    div
-      h3 Add New Bond
-    div
+  .section
+    .block
+      h3.title Add New Bond
+    .columns
       form(v-on:submit.prevent='addBond')
         div
           label(for='bondName') Name:

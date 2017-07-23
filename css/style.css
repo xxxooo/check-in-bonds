@@ -3,3 +3,7 @@
 .button.is-primary {
   margin: 0 .75em;
 }
+
+.modal .modal-background {
+  background: rgba(16, 16, 16, .66);
+}
