@@ -24,7 +24,7 @@ template#indexBonds
           tr(v-for='bond in bonds')
             td
               a
-                i.fa.fa-pencil(@click='editing(bond)')
+                i.fa.fa-qrcode
             td
               router-link(:to="{ name: 'view-bond', params: { id: bond['.key'] }}") {{bond.name}}
             td {{bond.info}}
@@ -37,10 +37,10 @@ template#indexBonds
             td
               i.fa.fa-check(v-if='bond.checkIn')
             td
-              a
-                i.fa.fa-qrcode
+              a(@click='editing(bond)')
+                i.fa.fa-pencil
 
-    edit-bond-modal(:origin='pickedBond', ref='edit-bond-modal')
+    edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
 
 template#editBondModal
   .modal(:class="{'is-active' : isOpen}")
@@ -52,50 +52,51 @@ template#editBondModal
           .columns
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder='姓名', v-model='bond.name')
+                input.input(type='text', placeholder='姓名', v-model='bondData.name')
                 span.icon.is-left
                   i.fa.fa-user
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder='資訊', v-model='bond.info')
+                input.input(type='text', placeholder='資訊', v-model='bondData.info')
                 span.icon.is-left
                   i.fa.fa-lock
           .columns
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder='email', v-model='bond.email')
+                input.input(type='text', placeholder='email', v-model='bondData.email')
                 span.icon.is-left
                   i.fa.fa-envelope
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder='電話', v-model='bond.phone')
+                input.input(type='text', placeholder='電話', v-model='bondData.phone')
                 span.icon.is-left
                   i.fa.fa-phone
           .columns
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder='帳號末五碼', v-model='bond.code')
+                input.input(type='text', placeholder='帳號末五碼', v-model='bondData.code')
                 span.icon.is-left
                   i.fa.fa-credit-card
             .column
               .control.has-icons-left
-                input.input(type='text', placeholder="匯款時間", v-model='bond.commitTime')
+                input.input(type='text', placeholder="匯款時間", v-model='bondData.commitTime')
                 span.icon.is-left
                   i.fa.fa-clock-o
           .columns
             .column
               span 付款
               label.switch
-                input(type='checkbox' v-model='bond.checked')
+                input(type='checkbox' v-model='bondData.checked')
                 .slider
             .column
               span 報到
               label.switch
-                input(type='checkbox' v-model='bond.checkIn')
+                input(type='checkbox' v-model='bondData.checkIn')
                 .slider
-          .notification(v-if='message')
-            button.delete(@click="message=''")
-            span {{message}}
+          transition(name='expand')
+            .notification(v-if='message')
+              button.delete(@click="message=''")
+              span {{message}}
           .box-foot
             template(v-if='isNew')
               a.button.is-primary(@click='create') 新增

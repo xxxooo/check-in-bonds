@@ -15,9 +15,10 @@ template#viewLogin
             input.input.is-medium(type='password', placeholder="password", v-model='user.password')
             span.icon.is-left
               i.fa.fa-lock
-        .notification(v-if='message')
-          button.delete(@click="message=''")
-          span {{message}}
+        transition(name='expand')
+          .notification(v-if='message')
+            button.delete(@click="message=''")
+            span {{message}}
         #signIn.has-text-centered
           a.button.is-primary(@click='signIn') 登入
       .column

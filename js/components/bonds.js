@@ -54,12 +54,12 @@ const bondsIndex = {
 Vue.component('edit-bond-modal', {
   template: '#editBondModal',
 
-  props: ['origin'],
+  props: ['bond'],
 
   data () {
     return {
       isOpen: false,
-      bond: {},
+      bondData: {},
       message: ''
     }
   },
@@ -72,15 +72,21 @@ Vue.component('edit-bond-modal', {
 
   watch: {
     isOpen (val) {
-      this.bond = val ? JSON.parse(JSON.stringify(this.origin)) : {}
+      this.bondData = val ? JSON.parse(JSON.stringify(this.bond)) : {}
+      delete this.bondData['.key']
     }
   },
 
   methods: {
     create () {
-      if (this.bond.name.length > 0) {
-        BondsRef.push(this.bond, (error) => {
-          console.log(error)
+      if (this.bondData.name.length > 0) {
+        BondsRef.push(this.bondData, (error) => {
+          if (error) {
+            console.log(error)
+            this.message = error
+          } else {
+            this.isOpen = false
+          }
         })
         this.isOpen = false
       } else {
@@ -88,9 +94,14 @@ Vue.component('edit-bond-modal', {
       }
     },
     update () {
-      if (this.bond.name.length > 0) {
-        BondsRef.child(this.bond['.key']).update(this.bond, (error) => {
-          console.log(error)
+      if (this.bondData.name.length > 0) {
+        BondsRef.child(this.bond['.key']).update(this.bondData, (error) => {
+          if (error) {
+            console.log(error)
+            this.message = error
+          } else {
+            this.isOpen = false
+          }
         })
       } else {
         this.message = '請輸入姓名'
