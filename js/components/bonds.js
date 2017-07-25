@@ -177,7 +177,6 @@ const viewBond = {
         if (error) {
           console.log(error)
           this.message = error
-          this.isClicked = false
         }
       })
     },

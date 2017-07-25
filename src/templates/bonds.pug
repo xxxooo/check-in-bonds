@@ -137,8 +137,8 @@ template#viewBond
   .section
     .columns
       .column
-      .column.has-text-centered
-        template(v-if='isAuthed')
+      .column.has-text-centered(v-if='isAuthed')
+        template(v-if='bond.name')
           .block
             .field
               h3.title {{bond.name}}
@@ -155,12 +155,20 @@ template#viewBond
                 i.fa.fa-check-circle
                 span 已報到
               .chec-in-time(v-if='bond.checkInTime') {{bond.checkInTime}}
+        template(v-else-if="bond.hasOwnProperty('.value')")
+          h3.invalid-info 找不到資料
+          i.fa.fa-exclamation-triangle
         template(v-else)
-          .blick
-            h3.title 請先登入
-            router-link.button(to='/login') 登入
+          .block
+            .spinner
+              .double-bounce1
+              .double-bounce2
         transition(name='expand')
           .notification(v-if='message')
             button.delete(@click="message=''")
             span {{message}}
+      .column.has-text-centered(v-else)
+        .blick
+          h3.title 請先登入
+          router-link.button(to='/login') 登入
       .column
