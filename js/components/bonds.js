@@ -160,6 +160,7 @@ const viewBond = {
     return {
       auth: {},
       isAuthed: false,
+      isClicked: false,
       message: ''
     }
   },
@@ -171,10 +172,12 @@ const viewBond = {
         checkInTime: new Date().toLocaleString()
       }
 
+      this.isClicked = true
       BondsRef.child(this.bond['.key']).update(updates, (error) => {
         if (error) {
           console.log(error)
           this.message = error
+          this.isClicked = false
         }
       })
     },
