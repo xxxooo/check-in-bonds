@@ -36,7 +36,7 @@ template#indexBonds
             td
               i.fa.fa-check(v-if='bond.checked')
             td
-              i.fa.fa-check(v-if='bond.checkIn')
+              i.fa.fa-check(v-if='bond.checkIn', :title='bond.checkInTime')
             td
               a(@click='editing(bond)')
                 i.fa.fa-pencil
@@ -132,3 +132,33 @@ template#deleteBondModal
         .box-foot
           a.button.is-danger(@click='destroy') 刪除
           a.button(@click='isOpen = false') 取消
+
+template#viewBond
+  .section
+    .columns
+      .column
+      .column.has-text-centered
+        template(v-if='isAuthed')
+          .block
+            .field
+              h3.title {{bond.name}}
+            .field
+              span {{bond.info}}
+          transition(name='fade')
+            .block(v-if='bond.name')
+              a.button.is-primary(v-if='!bond.checkIn', @click='checkIn')
+                i.fa.fa-check
+                span 報到
+              a.button.is-warning(v-else)
+                i.fa.fa-check-circle-o
+                span 已報到
+              .chec-in-time(v-if='bond.checkInTime') {{bond.checkInTime}}
+        template(v-else)
+          .blick
+            h3.title 請先登入
+            router-link.button(to='/login') 登入
+        transition(name='expand')
+          .notification(v-if='message')
+            button.delete(@click="message=''")
+            span {{message}}
+      .column

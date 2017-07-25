@@ -156,15 +156,42 @@ const viewBond = {
     }
   },
 
+  data () {
+    return {
+      auth: {},
+      isAuthed: false,
+      message: ''
+    }
+  },
+
   methods: {
-    checkAuth () {
-      if(!firebase.auth().currentUser) {
-        this.$router.push('/login')
+    checkIn () {
+      var updates = {
+        checkIn: true,
+        checkInTime: new Date().toLocaleString()
       }
+
+      BondsRef.child(this.bond['.key']).update(updates, (error) => {
+        if (error) {
+          console.log(error)
+          this.message = error
+        }
+      })
     },
+    checkAuthUser (user) {
+      if (user && user.email) {
+        this.isAuthed = true
+      } else {
+        this.isAuthed = false
+      }
+    }
   },
 
   created () {
-    this.checkAuth()
+    this.auth = firebase.auth()
+    this.auth.onAuthStateChanged((user) => {
+      this.checkAuthUser(user)
+      this.$forceUpdate()
+    })
   }
 }

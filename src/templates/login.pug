@@ -2,9 +2,8 @@ template#viewLogin
   .section
     .columns
       .column
-      .column
-        h2.title.has-text-centered
-          | 請登入
+      .column.has-text-centered
+        h2.title 請登入
         .field
           .control.has-icons-left.has-icons-right
             input.input.is-medium(type='email', placeholder="email", v-model='user.email')
@@ -15,7 +14,7 @@ template#viewLogin
             input.input.is-medium(type='password', placeholder="password", v-model='user.password')
             span.icon.is-left
               i.fa.fa-lock
-        .field.has-text-centered
+        .field
           a.button.is-primary(@click='signIn') 登入
         transition(name='expand')
           .notification(v-if='message')

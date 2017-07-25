@@ -1,5 +1,9 @@
 /* css style for layout.pug */
 
+.button .fa {
+  margin-right: 0.5rem;
+}
+
 .title.is-pulled-left {
   margin-right: .75em;
 }
@@ -18,7 +22,6 @@
   justify-content: flex-end;
 }
 
-/* deleting modal */
 .modal-content.narrow {
   max-width: 360px;
 }
@@ -28,7 +31,13 @@
   color: #b9b9b9;
 }
 
+.chec-in-time {
+  color: #b9b9b9;
+  font-size: 0.875em;
+}
 
+/***
+***/
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -95,6 +104,13 @@ input:checked + .slider:after {
 }
 
 /*** Vue transition ***/
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.55s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .expand-enter-active, .expand-leave-active {
   transition: all 0.4s;
 }
