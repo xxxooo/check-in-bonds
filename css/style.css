@@ -31,9 +31,10 @@
   color: #b9b9b9;
 }
 
-.chec-in-time {
+.check-in-time {
   color: #b9b9b9;
   font-size: 0.875em;
+  margin: 1em auto;
 }
 
 .invalid-info {

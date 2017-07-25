@@ -166,26 +166,31 @@ const viewBond = {
   },
 
   methods: {
-    checkIn () {
-      var updates = {
-        checkIn: true,
-        checkInTime: new Date().toLocaleString()
-      }
-
-      this.isClicked = true
-      BondsRef.child(this.bond['.key']).update(updates, (error) => {
-        if (error) {
-          console.log(error)
-          this.message = error
-        }
-      })
-    },
     checkAuthUser (user) {
       if (user && user.email) {
         this.isAuthed = true
       } else {
         this.isAuthed = false
       }
+    },
+    commit () {
+      let msg = '是否更新為已付款？'
+      if (confirm(msg)) {
+        BondsRef.child(this.bond['.key']).update({checked: true}, (error) => {
+          if (error) this.message = error
+        })
+      }
+    },
+    checkIn () {
+      let updates = {
+        checkIn: true,
+        checkInTime: new Date().toLocaleString()
+      }
+
+      this.isClicked = true
+      BondsRef.child(this.bond['.key']).update(updates, (error) => {
+        if (error) this.message = error
+      })
     }
   },
 
