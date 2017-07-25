@@ -6,6 +6,7 @@ const initBond = {
   phone: '',
   code: '',
   commitTime: '',
+  memo: '',
   checked: false,
   checkIn: false
 }
@@ -40,6 +41,10 @@ const bondsIndex = {
     editing (bond) {
       this.pickedBond = bond
       this.$refs['edit-bond-modal'].isOpen = true
+    },
+    deleting (bond) {
+      this.pickedBond = bond
+      this.$refs['delete-bond-modal'].isOpen = true
     }
   },
 
@@ -78,6 +83,12 @@ Vue.component('edit-bond-modal', {
   },
 
   methods: {
+    autosize (e) {
+      setTimeout(() => {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
+      }, 0);
+    },
     create () {
       if (this.bondData.name.length > 0) {
         BondsRef.push(this.bondData, (error) => {
@@ -106,46 +117,29 @@ Vue.component('edit-bond-modal', {
       } else {
         this.message = '請輸入姓名'
       }
-    },
-    deleting () {
-      let msg = '是否要刪除這張票卷？'
-      if (confirm(msg)) {
-        BondsRef.child(this.bond['.key']).remove()
-      }
     }
   },
 })
 
 //
-// Create a Bond
+// 刪除 Bond 確認視窗
 //
-// const newBond = {
-//   template: '#addBond',
-//
-//   data () {
-//     return {
-//       newBond: initBond
-//     }
-//   },
-//
-//   methods: {
-//     checkAuth () {
-//       if(!firebase.auth().currentUser) {
-//         this.$router.push('/login')
-//       }
-//     },
-//     addBond () {
-//       if (this.newBond.name.length > 0) {
-//         BondsRef.push(this.newBond)
-//         this.newBond = initBond
-//       }
-//     },
-//   },
-//
-//   created () {
-//     this.checkAuth()
-//   }
-// }
+Vue.component('delete-bond-modal', {
+  template: '#deleteBondModal',
+
+  props: ['bond'],
+
+  data () {
+    return { isOpen: false }
+  },
+
+  methods: {
+    destroy () {
+      BondsRef.child(this.bond['.key']).remove()
+      this.isOpen = false
+    }
+  },
+})
 
 //
 // Read a Bond
@@ -174,58 +168,3 @@ const viewBond = {
     this.checkAuth()
   }
 }
-
-// //
-// // Update a Bond
-// //
-// const editBond = {
-//   template: '#editBond',
-//
-//   firebase () {
-//     return {
-//       bond: {
-//         source: BondsRef.child(this.$route.params.id),
-//         asObject: true
-//       }
-//     }
-//   },
-//
-//   methods: {
-//     checkAuth () {
-//       if(!firebase.auth().currentUser) {
-//         this.$router.push('/login')
-//       }
-//     },
-//   },
-//
-//   created () {
-//     this.checkAuth()
-//   }
-// }
-//
-// //
-// // Delete a Bond
-// //
-// const deleteBond = {
-//   template: '<p>delete</p>',
-//
-//   methods: {
-//     checkAuth () {
-//       if(!firebase.auth().currentUser) {
-//         this.$router.push('/login')
-//       }
-//     },
-//   },
-//
-//   created () {
-//     this.checkAuth()
-//     BondsRef.child(this.$route.params.id).remove()
-//       .then(() => {
-//         console.log("Remove succeeded.")
-//       })
-//       .catch((error) => {
-//         console.log("Remove failed: " + error.message)
-//       });
-//     this.$router.push('/bonds')
-//   }
-// }

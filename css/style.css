@@ -1,12 +1,33 @@
 /* css style for layout.pug */
 
-.button.is-primary {
-  margin: 0 .75em;
+.title.is-pulled-left {
+  margin-right: .75em;
 }
 
 .modal .modal-background {
   background: rgba(16, 16, 16, .66);
 }
+.modal-card .textarea {
+  min-height: 3.25rem;
+}
+.box-foot .button:not(:last-child) {
+    margin-right: 10px;
+}
+.modal .box-foot {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* deleting modal */
+.modal-content.narrow {
+  max-width: 360px;
+}
+.icon-wrapper-right {
+  flex: 0.35;
+  text-align: right;
+  color: #b9b9b9;
+}
+
 
 /* The switch - the box around the slider */
 .switch {
