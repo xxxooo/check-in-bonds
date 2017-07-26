@@ -176,6 +176,12 @@ Vue.component('qr-view-modal', {
       let qr = new QRious(this.qrOptions),
         ctx = qr.element.getContext('2d')
 
+      // draw name
+      ctx.font = '11px Helvetica';
+      ctx.textAlign = 'end';
+      ctx.fillText(this.bond.name, this.qrOptions.size - 2, this.qrOptions.size - 2);
+
+      // draw center logo
       if (this.logoImg) {
         let imgRatio = this.logoImg.width / this.logoImg.height,
           drawHeight = this.getLogoSize(imgRatio),
