@@ -134,12 +134,82 @@ Vue.component('qr-view-modal', {
   props: ['bond'],
 
   data () {
-    return { isOpen: false }
+    return {
+      isOpen: false,
+      logoImg: null,
+      logoScaling: 0.75,
+      qrOptions: {
+        level: 'H',
+        size: 480,
+        foreground: '#A95432',
+        background: '#FDF2A3'
+      }
+    }
+  },
+
+  computed: {
+    checkBondUrl () {
+      return window.location.href.split('#')[0] + '#/bond/' + this.bond['.key']
+    }
+  },
+
+  watch: {
+    isOpen (val) {
+      if (val && this.bond['.key']) {
+        this.qrCode()
+      }
+    }
   },
 
   methods: {
-    //
+    getLogoSize (aspectRatio) {
+      if (aspectRatio > 0) {
+        var factor = 1 - 64 / (this.checkBondUrl.length + 128);
+        return Math.sqrt(0.24 * factor * this.qrOptions.size * this.qrOptions.size / aspectRatio) * this.logoScaling;
+      } else {
+        return 0;
+      }
+    },
+    qrCode () {
+      this.qrOptions.element = document.getElementById("qrCode")
+      this.qrOptions.value = this.checkBondUrl
+      let qr = new QRious(this.qrOptions),
+        ctx = qr.element.getContext('2d')
+
+      if (this.logoImg) {
+        let imgRatio = this.logoImg.width / this.logoImg.height,
+          drawHeight = this.getLogoSize(imgRatio),
+          drawWidth = imgRatio * drawHeight
+
+        ctx.drawImage(this.logoImg, 0.5 * (this.qrOptions.size - drawWidth), 0.5 * (this.qrOptions.size - drawHeight), drawWidth, drawHeight)
+      }
+    },
+    saveBlobAs (blob, fileName) {
+      var a = document.createElement("a")
+      a.style = "display: none"
+      a.href = window.URL.createObjectURL(blob)
+      a.download = fileName
+      document.body.appendChild(a)
+      a.click()
+      a.parentNode.removeChild(a)
+    },
+    getFileName () {
+      return Date.now().toString().slice(4,10) + '_' + this.bond.name + '.png'
+    },
+    download () {
+      if (this.qrOptions.element.width > 0) {
+        this.qrOptions.element.toBlob((blob) => {
+          this.saveBlobAs(blob, this.getFileName())
+        });
+      }
+    }
   },
+
+  mounted () {
+    let img = new Image()
+    img.src = './img/qr-logo.png'
+    img.onload = () => { this.logoImg = img }
+  }
 })
 
 //

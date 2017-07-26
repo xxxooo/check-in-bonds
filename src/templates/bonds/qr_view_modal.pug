@@ -1,9 +1,12 @@
 template#qrViewModal
   .modal(:class="{'is-active' : isOpen}")
     .modal-background
-    .modal-card.narrow
+    .modal-card
       .box.has-text-centered
         .block
-          span {{bond['.key']}}
+          canvas#qrCode.qr-code
         .box-foot
+          a.button.is-primary(@click='download')
+            i.fa.fa-download
+            span 儲存
           a.button(@click='isOpen = false') 取消

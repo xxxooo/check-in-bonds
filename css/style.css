@@ -48,6 +48,10 @@
   color: #d4d4d4;
 }
 
+.qr-code {
+  margin: 48px auto;
+}
+
 /***
 ***/
 /* The switch - the box around the slider */
