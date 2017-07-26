@@ -5,6 +5,6 @@ const router = new VueRouter({
     { path: '/login', component: appLogin },
     { path: '/logout', component: appLogout },
     { path: '/bonds', component: bondsIndex },
-    { name: 'view-bond', path: '/bond/:id', component: viewBond },
+    { name: 'check-bond', path: '/bond/:id', component: checkBond },
   ]
 })

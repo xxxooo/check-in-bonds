@@ -45,6 +45,10 @@ const bondsIndex = {
     deleting (bond) {
       this.pickedBond = bond
       this.$refs['delete-bond-modal'].isOpen = true
+    },
+    producing (bond) {
+      this.pickedBond = bond
+      this.$refs['qr-view-modal'].isOpen = true
     }
   },
 
@@ -122,6 +126,23 @@ Vue.component('edit-bond-modal', {
 })
 
 //
+// 產生 Bond QRcode 視窗
+//
+Vue.component('qr-view-modal', {
+  template: '#qrViewModal',
+
+  props: ['bond'],
+
+  data () {
+    return { isOpen: false }
+  },
+
+  methods: {
+    //
+  },
+})
+
+//
 // 刪除 Bond 確認視窗
 //
 Vue.component('delete-bond-modal', {
@@ -144,8 +165,8 @@ Vue.component('delete-bond-modal', {
 //
 // Read a Bond
 //
-const viewBond = {
-  template: '#viewBond',
+const checkBond = {
+  template: '#checkBond',
 
   firebase () {
     return {

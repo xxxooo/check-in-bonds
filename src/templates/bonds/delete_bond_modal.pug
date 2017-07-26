@@ -1,0 +1,22 @@
+template#deleteBondModal
+  .modal(:class="{'is-active' : isOpen}")
+    .modal-background
+    .modal-card.narrow
+      .box.has-text-centered
+        .block
+          h3.modal-card-title 是否要刪除這張票卷？
+        .columns
+          .column.icon-wrapper-right
+            span.icon
+              i.fa.fa-user
+          .column.has-text-left
+            span {{bond.name}}
+        .columns
+          .column.icon-wrapper-right
+            span.icon
+              i.fa.fa-info-circle
+          .column.has-text-left
+            span {{bond.info}}
+        .box-foot
+          a.button.is-danger(@click='destroy') 刪除
+          a.button(@click='isOpen = false') 取消

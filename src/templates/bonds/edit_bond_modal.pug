@@ -1,0 +1,62 @@
+template#editBondModal
+  .modal(:class="{'is-active' : isOpen}")
+    .modal-background
+    .modal-card.has-text-centered
+      .box.has-text-centered
+        .block
+          h3.modal-card-title {{isNew ? '新增票卷' : '編輯票卷'}}
+        .columns
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder='姓名', v-model='bondData.name')
+              span.icon.is-left
+                i.fa.fa-user
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder='資訊', v-model='bondData.info')
+              span.icon.is-left
+                i.fa.fa-info-circle
+        .columns
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder='email', v-model='bondData.email')
+              span.icon.is-left
+                i.fa.fa-envelope
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder='電話', v-model='bondData.phone')
+              span.icon.is-left
+                i.fa.fa-phone
+        .columns
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder='帳號末五碼', v-model='bondData.code')
+              span.icon.is-left
+                i.fa.fa-credit-card
+          .column
+            .control.has-icons-left
+              input.input(type='text', placeholder="匯款時間", v-model='bondData.commitTime')
+              span.icon.is-left
+                i.fa.fa-clock-o
+        .field
+          .control
+            textarea.textarea(placeholder='備註', v-model='bondData.memo', @keydown='autosize')
+        .columns
+          .column
+            span 付款
+            label.switch
+              input(type='checkbox' v-model='bondData.checked')
+              .slider
+          .column
+            span 報到
+            label.switch
+              input(type='checkbox' v-model='bondData.checkIn')
+              .slider
+          .column.box-foot
+            a.button.is-primary(v-if='isNew', @click='create') 新增
+            a.button.is-primary(v-else, @click='update') 儲存
+            a.button(@click='isOpen = false') 取消
+        transition(name='expand')
+          .notification(v-if='message')
+            button.delete(@click="message=''")
+            span {{message}}

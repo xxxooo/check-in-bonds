@@ -1,0 +1,39 @@
+template#checkBond
+  .section
+    .columns
+      .column
+      .column.has-text-centered(v-if='isAuthed')
+        template(v-if='bond.name')
+          .block
+            .field
+              h3.title {{bond.name}}
+            .field
+              span {{bond.info}}
+          transition(name='fade')
+            .block(v-if='bond.checked')
+              a.button.is-primary(v-if='!bond.checkIn', @click='checkIn')
+                span 報到
+              a.button.is-info(v-else-if='isClicked')
+                i.fa.fa-check
+                span 完成
+              a.button.is-warning(v-else)
+                i.fa.fa-check-circle
+                span 已報到
+              .check-in-time(v-if='bond.checkInTime') {{bond.checkInTime}}
+            .block(v-else)
+              a.button(@click='commit') 未付款
+        template(v-else-if="bond.hasOwnProperty('.value')")
+          h3.invalid-info 找不到資料
+          i.fa.fa-exclamation-triangle
+        template(v-else)
+          .block
+            .spinner
+        transition(name='expand')
+          .notification(v-if='message')
+            button.delete(@click="message=''")
+            span {{message}}
+      .column.has-text-centered(v-else)
+        .blick
+          h3.title 請先登入
+          router-link.button(to='/login') 登入
+      .column

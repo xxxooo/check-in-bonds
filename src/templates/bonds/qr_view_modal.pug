@@ -1,0 +1,9 @@
+template#qrViewModal
+  .modal(:class="{'is-active' : isOpen}")
+    .modal-background
+    .modal-card.narrow
+      .box.has-text-centered
+        .block
+          span {{bond['.key']}}
+        .box-foot
+          a.button(@click='isOpen = false') 取消

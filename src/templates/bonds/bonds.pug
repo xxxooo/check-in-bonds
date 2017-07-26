@@ -1,0 +1,53 @@
+template#indexBonds
+  .section
+    .block
+      h2.title.is-pulled-left 票卷列表
+      a.button.is-primary(@click='adding')
+          i.fa.fa-plus
+      router-link.button.is-pulled-right(to='/logout') 登出
+
+    div
+      table.table
+        thead
+          tr
+            th
+            th
+            th 姓名
+            th 資訊
+            th email
+            th 電話
+            th 匯款號碼
+            th 匯款時間
+            th 備註
+            th 已付款
+            th 報到
+            th
+            th
+        tbody
+          tr(v-for='(bond, idx) in bonds')
+            td {{idx + 1}}
+            td
+              a(@click='producing(bond)')
+                i.fa.fa-qrcode
+            td
+              router-link(:to="{ name: 'check-bond', params: { id: bond['.key'] }}") {{bond.name}}
+            td {{bond.info}}
+            td {{bond.email}}
+            td {{bond.phone}}
+            td {{bond.code}}
+            td {{bond.commitTime}}
+            td {{bond.memo}}
+            td
+              i.fa.fa-check(v-if='bond.checked')
+            td
+              i.fa.fa-check(v-if='bond.checkIn', :title='bond.checkInTime')
+            td
+              a(@click='editing(bond)')
+                i.fa.fa-pencil
+            td
+              a(@click='deleting(bond)')
+                i.fa.fa-trash
+
+    edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
+    delete-bond-modal(:bond='pickedBond', ref='delete-bond-modal')
+    qr-view-modal(:bond='pickedBond', ref='qr-view-modal')
