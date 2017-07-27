@@ -2,11 +2,13 @@ template#indexBonds
   .section
     .block
       h2.title.is-pulled-left 票卷列表
-      a.button.is-primary(@click='adding')
-          i.fa.fa-plus
-      router-link.button.is-pulled-right(to='/logout') 登出
+      transition(name='fade')
+        div(v-if='start')
+          a.button.is-primary(@click='adding')
+            i.fa.fa-plus
+          router-link.button.is-pulled-right(to='/logout') 登出
 
-    div
+    .block
       table.table
         thead
           tr
@@ -47,7 +49,11 @@ template#indexBonds
             td
               a(@click='deleting(bond)')
                 i.fa.fa-trash
-
+    transition(name='fade')
+      .block(v-if='bonds.length > 0')
+        a.button(@click='producingAll')
+          i.fa.fa-download
+          span 下載全部 QRcode
     edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
     delete-bond-modal(:bond='pickedBond', ref='delete-bond-modal')
     qr-view-modal(:bond='pickedBond', ref='qr-view-modal')

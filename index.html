@@ -23,12 +23,16 @@
       <router-view></router-view>
     </div>
     <template id="viewMain">
-      <div class="section">
-        <h1 class="title has-text-centered">Hello!</h1>
-        <div class="title has-text-centered">
-          <router-link class="button" v-if="auth.currentUser" to="/bonds">看票卷</router-link>
-          <router-link class="button" v-else to="/login">登入</router-link>
+      <div class="section has-text-centered">
+        <div class="block">
+          <h1 class="title">Hello!</h1>
         </div>
+        <transition name="fade">
+          <div class="block" v-if="start">
+            <router-link class="button" v-if="auth.currentUser" to="/bonds">看票卷</router-link>
+            <router-link class="button" v-else to="/login">登入</router-link>
+          </div>
+        </transition>
       </div>
     </template>
     <template id="viewLogin">
@@ -61,10 +65,14 @@
     <template id="indexBonds">
       <div class="section">
         <div class="block">
-          <h2 class="title is-pulled-left">票卷列表</h2><a class="button is-primary" @click="adding"><i class="fa fa-plus"></i></a>
-          <router-link class="button is-pulled-right" to="/logout">登出</router-link>
+          <h2 class="title is-pulled-left">票卷列表</h2>
+          <transition name="fade">
+            <div v-if="start"><a class="button is-primary" @click="adding"><i class="fa fa-plus"></i></a>
+              <router-link class="button is-pulled-right" to="/logout">登出</router-link>
+            </div>
+          </transition>
         </div>
-        <div>
+        <div class="block">
           <table class="table">
             <thead>
               <tr>
@@ -104,6 +112,9 @@
             </tbody>
           </table>
         </div>
+        <transition name="fade">
+          <div class="block" v-if="bonds.length &gt; 0"><a class="button" @click="producingAll"><i class="fa fa-download"></i><span>下載全部 QRcode</span></a></div>
+        </transition>
         <edit-bond-modal :bond="pickedBond" ref="edit-bond-modal"></edit-bond-modal>
         <delete-bond-modal :bond="pickedBond" ref="delete-bond-modal"></delete-bond-modal>
         <qr-view-modal :bond="pickedBond" ref="qr-view-modal"></qr-view-modal>

@@ -2,9 +2,10 @@
   router-view
 
 template#viewMain
-  .section
-    h1.title.has-text-centered
-      | Hello!
-    .title.has-text-centered
-      router-link.button(v-if='auth.currentUser', to='/bonds') 看票卷
-      router-link.button(v-else, to='/login') 登入
+  .section.has-text-centered
+    .block
+      h1.title Hello!
+    transition(name='fade')
+      .block(v-if='start')
+        router-link.button(v-if='auth.currentUser', to='/bonds') 看票卷
+        router-link.button(v-else, to='/login') 登入

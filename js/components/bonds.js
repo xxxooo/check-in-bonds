@@ -23,6 +23,7 @@ const bondsIndex = {
 
   data () {
     return {
+      start: false,
       newBond: initBond,
       pickedBond: {}
     }
@@ -49,10 +50,30 @@ const bondsIndex = {
     producing (bond) {
       this.pickedBond = bond
       this.$refs['qr-view-modal'].isOpen = true
+    },
+    downloadQrCode (idx) {
+      this.producing(this.bonds[idx])
+      setTimeout(() => {
+        this.$refs['qr-view-modal'].download()
+        this.$refs['qr-view-modal'].isOpen = false
+
+        if (idx + 1 < this.bonds.length) {
+          setTimeout(() => {
+            this.downloadQrCode(idx + 1)
+          }, 0)
+        }
+      },0)
+    },
+    producingAll () {
+      this.downloadQrCode(0)
     }
   },
 
   created () {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.start = true;
+      this.$forceUpdate()
+    })
     this.checkAuth()
   }
 }
@@ -140,7 +161,7 @@ Vue.component('qr-view-modal', {
       logoScaling: 0.75,
       qrOptions: {
         level: 'H',
-        size: 480,
+        size: 360,
         foreground: '#A95432',
         background: '#FDF2A3'
       }
@@ -179,7 +200,7 @@ Vue.component('qr-view-modal', {
       // draw name
       ctx.font = '11px Helvetica';
       ctx.textAlign = 'end';
-      ctx.fillText(this.bond.name, this.qrOptions.size - 2, this.qrOptions.size - 2);
+      ctx.fillText(this.bond.name, this.qrOptions.size - 3, this.qrOptions.size - 3);
 
       // draw center logo
       if (this.logoImg) {
@@ -192,9 +213,9 @@ Vue.component('qr-view-modal', {
     },
     saveBlobAs (blob, fileName) {
       var a = document.createElement("a")
-      a.style = "display: none"
-      a.href = window.URL.createObjectURL(blob)
       a.download = fileName
+      a.href = window.URL.createObjectURL(blob)
+      a.style = "display: none"
       document.body.appendChild(a)
       a.click()
       a.parentNode.removeChild(a)
@@ -204,8 +225,9 @@ Vue.component('qr-view-modal', {
     },
     download () {
       if (this.qrOptions.element.width > 0) {
+        let fileName = this.getFileName()
         this.qrOptions.element.toBlob((blob) => {
-          this.saveBlobAs(blob, this.getFileName())
+          this.saveBlobAs(blob, fileName)
         });
       }
     }
