@@ -11,12 +11,12 @@ template#checkBond
               span {{bond.info}}
           transition(name='fade')
             .block(v-if='bond.checked')
-              a.button.is-primary(v-if='!bond.checkIn', @click='checkIn')
+              a.button.is-large.is-primary(v-if='!bond.checkIn', @click='checkIn')
                 span 報到
-              a.button.is-info(v-else-if='isClicked')
+              a.button.is-large.is-info(v-else-if='isClicked')
                 i.fa.fa-check
                 span 完成
-              a.button.is-warning(v-else)
+              a.button.is-large.is-warning(v-else)
                 i.fa.fa-check-circle
                 span 已報到
               .check-in-time(v-if='bond.checkInTime') {{bond.checkInTime}}

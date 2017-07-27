@@ -66,13 +66,12 @@
       <div class="section">
         <div class="block">
           <h2 class="title is-pulled-left">票卷列表</h2>
+          <transition name="fade"><a class="button is-primary is-small add-bond" v-if="start" @click="adding"><i class="fa fa-plus"></i></a></transition>
           <transition name="fade">
-            <div v-if="start"><a class="button is-primary" @click="adding"><i class="fa fa-plus"></i></a>
-              <router-link class="button is-pulled-right" to="/logout">登出</router-link>
-            </div>
+            <router-link class="button is-pulled-right" v-if="start" to="/logout">登出</router-link>
           </transition>
         </div>
-        <div class="block">
+        <div class="block table-wrapper">
           <table class="table">
             <thead>
               <tr>
@@ -113,7 +112,7 @@
           </table>
         </div>
         <transition name="fade">
-          <div class="block" v-if="bonds.length &gt; 0"><a class="button" @click="producingAll"><i class="fa fa-download"></i><span>下載全部 QRcode</span></a></div>
+          <div class="block" v-if="bonds.length &gt; 0"><a class="button is-small download-all" @click="producingAll"><i class="fa fa-download"></i><span>下載全部 QRcode</span></a></div>
         </transition>
         <edit-bond-modal :bond="pickedBond" ref="edit-bond-modal"></edit-bond-modal>
         <delete-bond-modal :bond="pickedBond" ref="delete-bond-modal"></delete-bond-modal>
@@ -133,7 +132,7 @@
                 <div class="field"><span>{{bond.info}}</span></div>
               </div>
               <transition name="fade">
-                <div class="block" v-if="bond.checked"><a class="button is-primary" v-if="!bond.checkIn" @click="checkIn"><span>報到</span></a><a class="button is-info" v-else-if="isClicked"><i class="fa fa-check"></i><span>完成</span></a><a class="button is-warning" v-else><i class="fa fa-check-circle"></i><span>已報到</span></a>
+                <div class="block" v-if="bond.checked"><a class="button is-large is-primary" v-if="!bond.checkIn" @click="checkIn"><span>報到</span></a><a class="button is-large is-info" v-else-if="isClicked"><i class="fa fa-check"></i><span>完成</span></a><a class="button is-large is-warning" v-else><i class="fa fa-check-circle"></i><span>已報到</span></a>
                   <div class="check-in-time" v-if="bond.checkInTime">{{bond.checkInTime}}</div>
                 </div>
                 <div class="block" v-else><a class="button" @click="commit">未付款</a></div>
@@ -260,10 +259,10 @@
     <template id="qrViewModal">
       <div class="modal" :class="{'is-active' : isOpen}">
         <div class="modal-background"></div>
-        <div class="modal-card">
-          <div class="box has-text-centered">
-            <div class="block">
-              <canvas class="qr-code" id="qrCode"></canvas>
+        <div class="modal-card qr-wrapper">
+          <div class="box">
+            <div class="block qr-code">
+              <canvas id="qrCode"></canvas>
             </div>
             <div class="box-foot"><a class="button is-primary" @click="download"><i class="fa fa-download"></i><span>儲存</span></a><a class="button" @click="isOpen = false">取消</a></div>
           </div>

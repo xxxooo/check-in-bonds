@@ -158,7 +158,7 @@ Vue.component('qr-view-modal', {
     return {
       isOpen: false,
       logoImg: null,
-      logoScaling: 0.75,
+      logoScaling: 0.8,
       qrOptions: {
         level: 'H',
         size: 360,
@@ -198,7 +198,7 @@ Vue.component('qr-view-modal', {
         ctx = qr.element.getContext('2d')
 
       // draw name
-      ctx.font = '11px Helvetica';
+      ctx.font = '10px Helvetica';
       ctx.textAlign = 'end';
       ctx.fillText(this.bond.name, this.qrOptions.size - 3, this.qrOptions.size - 3);
 

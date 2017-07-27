@@ -3,7 +3,15 @@
 .button i.fa + span {
   margin-left: 0.5rem;
 }
-
+.button.is-small i.fa {
+  font-size: 1rem;
+}
+.button.is-large i.fa {
+  font-size: 1.75rem;
+}
+.add-bond {
+  margin-top: 6px;
+}
 .title.is-pulled-left {
   margin-right: .75em;
 }
@@ -20,6 +28,12 @@
 .modal .box-foot {
   display: flex;
   justify-content: flex-end;
+}
+.modal-card.qr-wrapper {
+  max-width: 400px;
+}
+.qr-code canvas {
+  width: 100%;
 }
 
 .modal-card.narrow {
@@ -48,8 +62,20 @@
   color: #d4d4d4;
 }
 
-.qr-code {
-  margin: 48px auto;
+.download-all {
+  opacity: 0.4;
+  transition: opacity .6s;
+}
+.download-all:hover {
+  opacity: .8;
+}
+
+.table-wrapper {
+  overflow: auto;
+  width: 100%;
+}
+.table-wrapper > .table {
+  min-width: 1080px;
 }
 
 /***

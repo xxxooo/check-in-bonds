@@ -1,10 +1,10 @@
 template#qrViewModal
   .modal(:class="{'is-active' : isOpen}")
     .modal-background
-    .modal-card
-      .box.has-text-centered
-        .block
-          canvas#qrCode.qr-code
+    .modal-card.qr-wrapper
+      .box
+        .block.qr-code
+          canvas#qrCode
         .box-foot
           a.button.is-primary(@click='download')
             i.fa.fa-download
