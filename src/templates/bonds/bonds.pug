@@ -8,7 +8,7 @@ template#indexBonds
       transition(name='fade')
         router-link.button.is-pulled-right(v-if='start', to='/logout') 登出
 
-    .block.table-wrapper
+    .block.table-wrapper(@click='pickedBond = {}')
       table.table
         thead
           tr
@@ -26,7 +26,7 @@ template#indexBonds
             th
             th
         tbody
-          tr(v-for='(bond, idx) in bonds')
+          tr(v-for='(bond, idx) in bonds', :class="{'is-selected' : pickedBond == bond}", @click.stop='pickedBond = bond')
             td {{idx + 1}}
             td
               a(@click='producing(bond)')
@@ -34,7 +34,8 @@ template#indexBonds
             td
               router-link(:to="{ name: 'check-bond', params: { id: bond['.key'] }}") {{bond.name}}
             td {{bond.info}}
-            td {{bond.email}}
+            td
+              a(:href='getMailTo(bond)') {{bond.email}}
             td {{bond.phone}}
             td {{bond.code}}
             td {{bond.commitTime}}

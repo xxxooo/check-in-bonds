@@ -71,7 +71,7 @@
             <router-link class="button is-pulled-right" v-if="start" to="/logout">登出</router-link>
           </transition>
         </div>
-        <div class="block table-wrapper">
+        <div class="block table-wrapper" @click="pickedBond = {}">
           <table class="table">
             <thead>
               <tr>
@@ -91,14 +91,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(bond, idx) in bonds">
+              <tr v-for="(bond, idx) in bonds" :class="{'is-selected' : pickedBond == bond}" @click.stop="pickedBond = bond">
                 <td>{{idx + 1}}</td>
                 <td><a @click="producing(bond)"><i class="fa fa-qrcode"></i></a></td>
                 <td>
                   <router-link :to="{ name: 'check-bond', params: { id: bond['.key'] }}">{{bond.name}}</router-link>
                 </td>
                 <td>{{bond.info}}</td>
-                <td>{{bond.email}}</td>
+                <td><a :href="getMailTo(bond)">{{bond.email}}</a></td>
                 <td>{{bond.phone}}</td>
                 <td>{{bond.code}}</td>
                 <td>{{bond.commitTime}}</td>
@@ -241,15 +241,13 @@
         <div class="modal-card narrow">
           <div class="box has-text-centered">
             <div class="block">
-              <h3 class="modal-card-title">是否要刪除這張票卷？</h3>
+              <h3 class="modal-card-title">確認刪除？</h3>
             </div>
-            <div class="columns">
-              <div class="column icon-wrapper-right"><span class="icon"><i class="fa fa-user"></i></span></div>
-              <div class="column has-text-left"><span>{{bond.name}}</span></div>
-            </div>
-            <div class="columns">
-              <div class="column icon-wrapper-right"><span class="icon"><i class="fa fa-info-circle"></i></span></div>
-              <div class="column has-text-left"><span>{{bond.info}}</span></div>
+            <div class="block">
+              <div class="field">
+                <h3 class="title">{{bond.name}}</h3>
+              </div>
+              <div class="field"><span>{{bond.info}}</span></div>
             </div>
             <div class="box-foot"><a class="button is-danger" @click="destroy">刪除</a><a class="button" @click="isOpen = false">取消</a></div>
           </div>

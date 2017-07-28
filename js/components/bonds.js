@@ -51,6 +51,9 @@ const bondsIndex = {
       this.pickedBond = bond
       this.$refs['qr-view-modal'].isOpen = true
     },
+    getMailTo (bond) {
+      return 'mailto:' + bond.email + '?subject=大稻埕懷舊畢業趴 報名通知'
+    },
     downloadQrCode (idx) {
       this.producing(this.bonds[idx])
       setTimeout(() => {
@@ -65,7 +68,10 @@ const bondsIndex = {
       },0)
     },
     producingAll () {
-      this.downloadQrCode(0)
+      let msg = '是否要下載全部 ' + this.bonds.length + ' 張 QRcode 圖片？'
+      if (confirm(msg)) {
+        this.downloadQrCode(0)
+      }
     }
   },
 
