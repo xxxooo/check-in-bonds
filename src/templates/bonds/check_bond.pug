@@ -3,6 +3,9 @@ template#checkBond
     .columns
       .column
       .column.has-text-centered(v-if='isAuthed')
+        .block
+          router-link(:to="{name: 'bonds', query: {mode: $route.query.mode}}").icon.back
+            i.fa.fa-list
         template(v-if='bond.name')
           .block
             .field

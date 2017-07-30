@@ -12,10 +12,16 @@ const appLogin = {
     }
   },
 
+  computed: {
+    modeQuery () {
+      return this.$route.query.mode ? '?mode=' + this.$route.query.mode : ''
+    }
+  },
+
   methods: {
     checkAuth () {
       if(this.auth.currentUser) {
-        this.$router.push('/bonds')
+        this.$router.push('/bonds' + this.modeQuery)
       }
     },
     signIn () {

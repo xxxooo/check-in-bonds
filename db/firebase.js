@@ -9,7 +9,19 @@ const config = {
 }
 firebase.initializeApp(config)
 
-const BondsRef = firebase.database().ref('bonds')
+var BondsRef = null
+const dbGetBondsRef = (mode) => {
+  if (mode == 'pvt') {
+    return firebase.database().ref('private/bonds')
+  } else {
+    return firebase.database().ref('bonds')
+  }
+}
+
+const Admins = [
+  'xxxooo.tw@gmail.com',
+  'monkey.lu18@gmail.com'
+]
 
 //
 // Need auth to do something

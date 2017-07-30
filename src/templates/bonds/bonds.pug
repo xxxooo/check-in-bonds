@@ -1,7 +1,10 @@
 template#indexBonds
   .section
     .block
-      h2.title.is-pulled-left 票卷列表
+      h2.title.is-pulled-left
+        router-link(to='/').icon.back
+          i.fa.fa-university
+        span 票卷列表
       transition(name='fade')
         a.button.is-primary.is-small.add-bond(v-if='start', @click='adding')
           i.fa.fa-plus
@@ -26,13 +29,13 @@ template#indexBonds
             th
             th
         tbody
-          tr(v-for='(bond, idx) in bonds', :class="{'is-selected' : pickedBond == bond}", @click.stop='pickedBond = bond')
+          tr(v-for='(bond, idx) in bonds', :class="{'is-selected' : bonds.length > 1 && pickedBond == bond}", @click.stop='pickedBond = bond')
             td {{idx + 1}}
             td
               a(@click='producing(bond)')
                 i.fa.fa-qrcode
             td
-              router-link(:to="{ name: 'check-bond', params: { id: bond['.key'] }}") {{bond.name}}
+              router-link(:to="{ name: 'check-bond', params: { id: bond['.key'] }, query: {mode: $route.query.mode}}") {{bond.name}}
             td {{bond.info}}
             td
               a(:href='getMailTo(bond)') {{bond.email}}

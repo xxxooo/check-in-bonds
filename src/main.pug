@@ -6,6 +6,9 @@ template#viewMain
     .block
       h1.title Hello!
     transition(name='fade')
-      .block(v-if='start')
-        router-link.button(v-if='auth.currentUser', to='/bonds') 看票卷
-        router-link.button(v-else, to='/login') 登入
+      .block.main-functions(v-if='start')
+        .field(v-if='isAdmin')
+          router-link.button(:to="{name: 'bonds', query: {mode: 'pvt'}}") 查票卷
+        .field
+          router-link.button(v-if='auth.currentUser', to='/bonds') 測試區
+          router-link.button(v-else, to='/login') 登入

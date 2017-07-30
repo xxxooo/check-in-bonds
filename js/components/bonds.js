@@ -17,22 +17,31 @@ const initBond = {
 const bondsIndex = {
   template: '#indexBonds',
 
-  firebase: {
-    bonds: BondsRef
+  firebase () {
+    return {
+      bonds: BondsRef
+    }
   },
 
   data () {
     return {
       start: false,
+      mode: null,
       newBond: initBond,
       pickedBond: {}
+    }
+  },
+
+  computed: {
+    modeQuery () {
+      return this.$route.query.mode ? '?mode=' + this.$route.query.mode : ''
     }
   },
 
   methods: {
     checkAuth () {
       if(!firebase.auth().currentUser) {
-        this.$router.push('/login')
+        this.$router.push('/login' + this.modeQuery)
       }
     },
     adding () {
@@ -75,12 +84,18 @@ const bondsIndex = {
     }
   },
 
+  beforeCreate () {
+    BondsRef = dbGetBondsRef(this.$route.query.mode)
+  },
+
   created () {
     firebase.auth().onAuthStateChanged((user) => {
       this.start = true;
       this.$forceUpdate()
     })
     this.checkAuth()
+
+    this.mode = this.$route.params.mode
   }
 }
 
@@ -108,6 +123,7 @@ Vue.component('edit-bond-modal', {
 
   watch: {
     isOpen (val) {
+      this.message = ''
       this.bondData = val ? JSON.parse(JSON.stringify(this.bond)) : {}
       delete this.bondData['.key']
     }
@@ -122,24 +138,23 @@ Vue.component('edit-bond-modal', {
     },
     create () {
       if (this.bondData.name.length > 0) {
+        this.bondData.updator = firebase.auth().currentUser.email
         BondsRef.push(this.bondData, (error) => {
           if (error) {
-            console.log(error)
             this.message = error
           } else {
             this.isOpen = false
           }
         })
-        this.isOpen = false
       } else {
         this.message = '請輸入姓名'
       }
     },
     update () {
       if (this.bondData.name.length > 0) {
+        this.bondData.updator = firebase.auth().currentUser.email
         BondsRef.child(this.bond['.key']).update(this.bondData, (error) => {
           if (error) {
-            console.log(error)
             this.message = error
           } else {
             this.isOpen = false
@@ -164,19 +179,24 @@ Vue.component('qr-view-modal', {
     return {
       isOpen: false,
       logoImg: null,
-      logoScaling: 0.8,
+      logoScaling: 1.125,
       qrOptions: {
         level: 'H',
-        size: 360,
-        foreground: '#A95432',
-        background: '#FDF2A3'
+        size: 384,
+        padding: 20,
+        foreground: '#853c10',
+        background: '#fff0a2'
       }
     }
   },
 
   computed: {
+    modeQuery () {
+      return this.$route.query.mode ? '?mode=' + this.$route.query.mode : ''
+    },
     checkBondUrl () {
-      return window.location.href.split('#')[0] + '#/bond/' + this.bond['.key']
+      //return 'https://xxxooo.github.io/check-in-bonds/#/bond/'+ this.bond['.key'] + this.modeQuery
+      return window.location.href.split('#')[0] + '#/bond/' + this.bond['.key'] + this.modeQuery
     }
   },
 
@@ -206,7 +226,7 @@ Vue.component('qr-view-modal', {
       // draw name
       ctx.font = '10px Helvetica';
       ctx.textAlign = 'end';
-      ctx.fillText(this.bond.name, this.qrOptions.size - 3, this.qrOptions.size - 3);
+      ctx.fillText(this.bond.name, this.qrOptions.size - 22, this.qrOptions.size - 9);
 
       // draw center logo
       if (this.logoImg) {
@@ -317,6 +337,10 @@ const checkBond = {
         if (error) this.message = error
       })
     }
+  },
+
+  beforeCreate () {
+    BondsRef = dbGetBondsRef(this.$route.query.mode)
   },
 
   created () {

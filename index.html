@@ -28,9 +28,14 @@
           <h1 class="title">Hello!</h1>
         </div>
         <transition name="fade">
-          <div class="block" v-if="start">
-            <router-link class="button" v-if="auth.currentUser" to="/bonds">看票卷</router-link>
-            <router-link class="button" v-else to="/login">登入</router-link>
+          <div class="block main-functions" v-if="start">
+            <div class="field" v-if="isAdmin">
+              <router-link class="button" :to="{name: 'bonds', query: {mode: 'pvt'}}">查票卷</router-link>
+            </div>
+            <div class="field">
+              <router-link class="button" v-if="auth.currentUser" to="/bonds">測試區</router-link>
+              <router-link class="button" v-else to="/login">登入</router-link>
+            </div>
           </div>
         </transition>
       </div>
@@ -65,7 +70,9 @@
     <template id="indexBonds">
       <div class="section">
         <div class="block">
-          <h2 class="title is-pulled-left">票卷列表</h2>
+          <h2 class="title is-pulled-left">
+            <router-link class="icon back" to="/"><i class="fa fa-university"></i></router-link><span>票卷列表</span>
+          </h2>
           <transition name="fade"><a class="button is-primary is-small add-bond" v-if="start" @click="adding"><i class="fa fa-plus"></i></a></transition>
           <transition name="fade">
             <router-link class="button is-pulled-right" v-if="start" to="/logout">登出</router-link>
@@ -91,11 +98,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(bond, idx) in bonds" :class="{'is-selected' : pickedBond == bond}" @click.stop="pickedBond = bond">
+              <tr v-for="(bond, idx) in bonds" :class="{'is-selected' : bonds.length &gt; 1 &amp;&amp; pickedBond == bond}" @click.stop="pickedBond = bond">
                 <td>{{idx + 1}}</td>
                 <td><a @click="producing(bond)"><i class="fa fa-qrcode"></i></a></td>
                 <td>
-                  <router-link :to="{ name: 'check-bond', params: { id: bond['.key'] }}">{{bond.name}}</router-link>
+                  <router-link :to="{ name: 'check-bond', params: { id: bond['.key'] }, query: {mode: $route.query.mode}}">{{bond.name}}</router-link>
                 </td>
                 <td>{{bond.info}}</td>
                 <td><a :href="getMailTo(bond)">{{bond.email}}</a></td>
@@ -124,6 +131,9 @@
         <div class="columns">
           <div class="column"></div>
           <div class="column has-text-centered" v-if="isAuthed">
+            <div class="block">
+              <router-link class="icon back" :to="{name: 'bonds', query: {mode: $route.query.mode}}"><i class="fa fa-list"></i></router-link>
+            </div>
             <template v-if="bond.name">
               <div class="block">
                 <div class="field">
