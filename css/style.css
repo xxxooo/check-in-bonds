@@ -94,7 +94,18 @@ a.icon.back + span {
   width: 100%;
 }
 .table-wrapper > .table {
-  min-width: 1080px;
+  min-width: 1200px;
+}
+.table-wrapper > .table.slim {
+  min-width: 320px;
+  max-width: 540px;
+}
+
+.table th > .fa-caret-square-o-left {
+  transition: all .5s;
+}
+.table.slim th > .fa-caret-square-o-left {
+  transform: rotateY(180deg);
 }
 
 /***

@@ -12,22 +12,25 @@ template#indexBonds
         router-link.button.is-pulled-right(v-if='start', to='/logout') 登出
 
     .block.table-wrapper(@click='pickedBond = {}')
-      table.table
+      table.table(:class="{slim : slim}")
         thead
           tr
-            th
+            th(@click='slim = !slim')
+              i.fa.fa-caret-square-o-left
             th
             th 姓名
-            th 資訊
-            th email
-            th 電話
-            th 匯款號碼
-            th 匯款時間
-            th 備註
+            template(v-if='!slim')
+              th 資訊
+              th email
+              th 電話
+              th 匯款號碼
+              th 匯款時間
+              th 備註
             th 已付款
             th 報到
             th
-            th
+            template(v-if='!slim')
+              th
         tbody
           tr(v-for='(bond, idx) in bonds', :class="{'is-selected' : bonds.length > 1 && pickedBond == bond}", @click.stop='pickedBond = bond')
             td {{idx + 1}}
@@ -36,13 +39,14 @@ template#indexBonds
                 i.fa.fa-qrcode
             td
               router-link(:to="{ name: 'check-bond', params: { id: bond['.key'] }, query: {mode: $route.query.mode}}") {{bond.name}}
-            td {{bond.info}}
-            td
-              a(:href='getMailTo(bond)') {{bond.email}}
-            td {{bond.phone}}
-            td {{bond.code}}
-            td {{bond.commitTime}}
-            td {{bond.memo}}
+            template(v-if='!slim')
+              td {{bond.info}}
+              td
+                a(:href='getMailTo(bond)') {{bond.email}}
+              td {{bond.phone}}
+              td {{bond.code}}
+              td {{bond.commitTime}}
+              td {{bond.memo}}
             td
               i.fa.fa-check(v-if='bond.checked')
             td
@@ -50,9 +54,10 @@ template#indexBonds
             td
               a(@click='editing(bond)')
                 i.fa.fa-pencil
-            td
-              a(@click='deleting(bond)')
-                i.fa.fa-trash
+            template(v-if='!slim')
+              td
+                a(@click='deleting(bond)')
+                  i.fa.fa-trash
     transition(name='fade')
       .block(v-if='bonds.length > 0')
         a.button.is-small.download-all(@click='producingAll')

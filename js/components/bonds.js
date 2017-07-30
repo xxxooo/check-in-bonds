@@ -26,6 +26,7 @@ const bondsIndex = {
   data () {
     return {
       start: false,
+      slim: false,
       mode: null,
       newBond: initBond,
       pickedBond: {}

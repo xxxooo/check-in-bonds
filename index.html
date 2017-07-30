@@ -79,22 +79,26 @@
           </transition>
         </div>
         <div class="block table-wrapper" @click="pickedBond = {}">
-          <table class="table">
+          <table class="table" :class="{slim : slim}">
             <thead>
               <tr>
-                <th></th>
+                <th @click="slim = !slim"><i class="fa fa-caret-square-o-left"></i></th>
                 <th></th>
                 <th>姓名</th>
-                <th>資訊</th>
-                <th>email</th>
-                <th>電話</th>
-                <th>匯款號碼</th>
-                <th>匯款時間</th>
-                <th>備註</th>
+                <template v-if="!slim">
+                  <th>資訊</th>
+                  <th>email</th>
+                  <th>電話</th>
+                  <th>匯款號碼</th>
+                  <th>匯款時間</th>
+                  <th>備註</th>
+                </template>
                 <th>已付款</th>
                 <th>報到</th>
                 <th></th>
-                <th></th>
+                <template v-if="!slim">
+                  <th></th>
+                </template>
               </tr>
             </thead>
             <tbody>
@@ -104,16 +108,20 @@
                 <td>
                   <router-link :to="{ name: 'check-bond', params: { id: bond['.key'] }, query: {mode: $route.query.mode}}">{{bond.name}}</router-link>
                 </td>
-                <td>{{bond.info}}</td>
-                <td><a :href="getMailTo(bond)">{{bond.email}}</a></td>
-                <td>{{bond.phone}}</td>
-                <td>{{bond.code}}</td>
-                <td>{{bond.commitTime}}</td>
-                <td>{{bond.memo}}</td>
+                <template v-if="!slim">
+                  <td>{{bond.info}}</td>
+                  <td><a :href="getMailTo(bond)">{{bond.email}}</a></td>
+                  <td>{{bond.phone}}</td>
+                  <td>{{bond.code}}</td>
+                  <td>{{bond.commitTime}}</td>
+                  <td>{{bond.memo}}</td>
+                </template>
                 <td><i class="fa fa-check" v-if="bond.checked"></i></td>
                 <td><i class="fa fa-check" v-if="bond.checkIn" :title="bond.checkInTime"></i></td>
                 <td><a @click="editing(bond)"><i class="fa fa-pencil"></i></a></td>
-                <td><a @click="deleting(bond)"><i class="fa fa-trash"></i></a></td>
+                <template v-if="!slim">
+                  <td><a @click="deleting(bond)"><i class="fa fa-trash"></i></a></td>
+                </template>
               </tr>
             </tbody>
           </table>
