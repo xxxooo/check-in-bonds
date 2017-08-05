@@ -3,12 +3,21 @@
 
 template#viewMain
   .section.has-text-centered
-    .block
-      h1.title Hello!
+    .block(v-if='!ready')
+      .spinner
     transition(name='fade')
-      .block.main-functions(v-if='start')
-        .field(v-if='isAdmin')
-          router-link.button(:to="{name: 'bonds', query: {mode: 'pvt'}}") 查票卷
-        .field
-          router-link.button(v-if='auth.currentUser', to='/bonds') 測試區
-          router-link.button(v-else, to='/login') 登入
+      div(v-if='ready')
+        .block
+          h1.title Hello!
+        .block.main-functions
+          .field(v-if='isAdmin')
+            router-link.button(:to="{name: 'bonds', query: {mode: 'pvt'}}") 管理票卷
+          .field
+            router-link.button(v-if='auth.currentUser', to='/bonds') 測試資料
+            router-link.button(v-else, to='/login') 登入
+
+template#pageNotFound
+  .section.has-text-centered
+    .block
+      h3.invalid-info 找不到資料
+      i.fa.fa-exclamation-triangle

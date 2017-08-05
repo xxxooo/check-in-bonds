@@ -1,9 +1,11 @@
+// main page
+//
 const main = {
   template: '#viewMain',
 
   data () {
     return {
-      start: false,
+      ready: false,
       isAdmin: null,
       auth: firebase.auth()
     }
@@ -11,9 +13,15 @@ const main = {
 
   created () {
     this.auth.onAuthStateChanged((user) => {
-      this.start = true
-      this.isAdmin = Admins.indexOf(user.email) >= 0
+      this.ready = true
+      if (user) this.isAdmin = Admins.indexOf(user.email) >= 0
       this.$forceUpdate()
     })
   }
+}
+
+// 404 page
+//
+const pageNotFound = {
+  template: '#pageNotFound'
 }

@@ -19,6 +19,7 @@ const router = new VueRouter({
     { name: 'bonds', path: '/bonds', component: bondsIndex },
     { name: 'check-bond', path: '/bond/:id', component: checkBond },
     { name: 'temp', path: '/temp', component: Temp },
-    { name: 'temp2', path: '/temp2', component: Temp2 }
+    { name: 'temp2', path: '/temp2', component: Temp2 },
+    { path: '*', component: pageNotFound }
   ]
 })

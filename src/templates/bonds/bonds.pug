@@ -6,10 +6,10 @@ template#indexBonds
           i.fa.fa-university
         span 票卷列表
       transition(name='fade')
-        a.button.is-primary.is-small.add-bond(v-if='start', @click='adding')
+        a.button.is-primary.is-small.add-bond(v-if='ready', @click='adding')
           i.fa.fa-plus
       transition(name='fade')
-        router-link.button.is-pulled-right(v-if='start', to='/logout') 登出
+        router-link.button.is-pulled-right(v-if='ready', to='/logout') 登出
 
     .block.table-wrapper(@click='pickedBond = {}')
       table.table(:class="{slim : slim}")

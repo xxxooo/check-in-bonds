@@ -25,20 +25,32 @@
     </div>
     <template id="viewMain">
       <div class="section has-text-centered">
-        <div class="block">
-          <h1 class="title">Hello!</h1>
+        <div class="block" v-if="!ready">
+          <div class="spinner"></div>
         </div>
         <transition name="fade">
-          <div class="block main-functions" v-if="start">
-            <div class="field" v-if="isAdmin">
-              <router-link class="button" :to="{name: 'bonds', query: {mode: 'pvt'}}">查票卷</router-link>
+          <div v-if="ready">
+            <div class="block">
+              <h1 class="title">Hello!</h1>
             </div>
-            <div class="field">
-              <router-link class="button" v-if="auth.currentUser" to="/bonds">測試區</router-link>
-              <router-link class="button" v-else to="/login">登入</router-link>
+            <div class="block main-functions">
+              <div class="field" v-if="isAdmin">
+                <router-link class="button" :to="{name: 'bonds', query: {mode: 'pvt'}}">管理票卷</router-link>
+              </div>
+              <div class="field">
+                <router-link class="button" v-if="auth.currentUser" to="/bonds">測試資料</router-link>
+                <router-link class="button" v-else to="/login">登入</router-link>
+              </div>
             </div>
           </div>
         </transition>
+      </div>
+    </template>
+    <template id="pageNotFound">
+      <div class="section has-text-centered">
+        <div class="block">
+          <h3 class="invalid-info">找不到資料</h3><i class="fa fa-exclamation-triangle"></i>
+        </div>
       </div>
     </template>
     <template id="viewLogin">
@@ -74,9 +86,9 @@
           <h2 class="title is-pulled-left">
             <router-link class="icon back" to="/"><i class="fa fa-university"></i></router-link><span>票卷列表</span>
           </h2>
-          <transition name="fade"><a class="button is-primary is-small add-bond" v-if="start" @click="adding"><i class="fa fa-plus"></i></a></transition>
+          <transition name="fade"><a class="button is-primary is-small add-bond" v-if="ready" @click="adding"><i class="fa fa-plus"></i></a></transition>
           <transition name="fade">
-            <router-link class="button is-pulled-right" v-if="start" to="/logout">登出</router-link>
+            <router-link class="button is-pulled-right" v-if="ready" to="/logout">登出</router-link>
           </transition>
         </div>
         <div class="block table-wrapper" @click="pickedBond = {}">
@@ -136,49 +148,52 @@
       </div>
     </template>
     <template id="checkBond">
-      <div class="section">
-        <div class="columns">
-          <div class="column"></div>
-          <div class="column has-text-centered" v-if="isAuthed">
-            <div class="block">
-              <router-link class="icon back" :to="{name: 'bonds', query: {mode: $route.query.mode}}"><i class="fa fa-list"></i></router-link>
-            </div>
-            <template v-if="bond.name">
-              <div class="block">
-                <div class="field">
-                  <h3 class="title">{{bond.name}}</h3>
-                </div>
-                <div class="field"><span>{{bond.info}}</span></div>
-              </div>
-              <transition name="fade">
-                <div class="block" v-if="bond.checked"><a class="button is-large is-primary" v-if="!bond.checkIn" @click="checkIn"><span>報到</span></a><a class="button is-large is-info" v-else-if="isClicked"><i class="fa fa-check"></i><span>完成</span></a><a class="button is-large is-warning" v-else><i class="fa fa-check-circle"></i><span>已報到</span></a>
-                  <div class="check-in-time" v-if="bond.checkInTime">{{bond.checkInTime}}</div>
-                </div>
-                <div class="block" v-else><a class="button" @click="commit">未付款</a></div>
-              </transition>
-            </template>
-            <template v-else-if="bond.hasOwnProperty('.value')">
-              <h3 class="invalid-info">找不到資料</h3><i class="fa fa-exclamation-triangle"></i>
-            </template>
-            <template v-else>
-              <div class="block">
-                <div class="spinner"></div>
-              </div>
-            </template>
-            <transition name="expand">
-              <div class="notification" v-if="message">
-                <button class="delete" @click="message=''"></button><span>{{message}}</span>
-              </div>
-            </transition>
-          </div>
-          <div class="column has-text-centered" v-else>
-            <div class="blick">
-              <h3 class="title">請先登入</h3>
-              <router-link class="button" to="/login">登入</router-link>
-            </div>
-          </div>
-          <div class="column"></div>
+      <div class="section has-text-centered">
+        <div class="block" v-if="!ready">
+          <div class="spinner"></div>
         </div>
+        <transition name="fade">
+          <div v-if="ready">
+            <div class="column" v-if="isAuthed">
+              <template v-if="bond.name">
+                <div class="block">
+                  <router-link class="icon back" :to="{name: 'bonds', query: {mode: $route.query.mode}}"><i class="fa fa-list"></i></router-link>
+                </div>
+                <div class="block">
+                  <div class="field">
+                    <h3 class="title">{{bond.name}}</h3>
+                  </div>
+                  <div class="field"><span>{{bond.info}}</span></div>
+                </div>
+                <transition name="fade">
+                  <div class="block" v-if="bond.checked"><a class="button is-large is-primary" v-if="!bond.checkIn" @click="checkIn"><span>報到</span></a><a class="button is-large is-info" v-else-if="isClicked"><i class="fa fa-check"></i><span>完成</span></a><a class="button is-large is-warning" v-else><i class="fa fa-check-circle"></i><span>已報到</span></a>
+                    <div class="check-in-time" v-if="bond.checkInTime">{{bond.checkInTime}}</div>
+                  </div>
+                  <div class="block" v-else><a class="button" @click="commit">未付款</a></div>
+                </transition>
+              </template>
+              <template v-else-if="loaded">
+                <h3 class="invalid-info">找不到資料</h3><i class="fa fa-exclamation-triangle"></i>
+              </template>
+              <template v-else>
+                <div class="block">
+                  <div class="spinner"></div>
+                </div>
+              </template>
+              <transition name="expand">
+                <div class="notification" v-if="message">
+                  <button class="delete" @click="message=''"></button><span>{{message}}</span>
+                </div>
+              </transition>
+            </div>
+            <div class="column has-text-centered" v-else>
+              <div class="blick">
+                <h3 class="title">請先登入</h3>
+                <router-link class="button" to="/login">登入</router-link>
+              </div>
+            </div>
+          </div>
+        </transition>
       </div>
     </template>
     <template id="editBondModal">
