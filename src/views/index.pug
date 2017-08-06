@@ -1,0 +1,17 @@
+extends ../shared/layout.pug
+
+block styles_and_scripts
+  include ../shared/styles_and_scripts.pug
+  link(rel="stylesheet", href="css/style.css")
+  script(src="db/firebase.js")
+
+block bottom_scripts
+  script(src="js/router.js")
+  script(src="js/index.js")
+
+block title
+  title Check in bounds
+
+block body_content
+  #app.container
+    router-view

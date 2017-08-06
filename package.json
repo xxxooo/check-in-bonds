@@ -1,0 +1,27 @@
+{
+  "name": "check-in-bonds",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "npm run server & npm run build",
+    "server": "http-server",
+    "build": "pug src/views/ --out ./ -P -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xxxooo/check-in-bonds.git"
+  },
+  "author": "Tim Chen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xxxooo/check-in-bonds/issues"
+  },
+  "homepage": "https://github.com/xxxooo/check-in-bonds#readme",
+  "dependencies": {
+    "http-server": ">=0.10.0",
+    "pug": "2.0.x",
+    "pug-cli": "1.0.x"
+  }
+}

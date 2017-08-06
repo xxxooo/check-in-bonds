@@ -1,0 +1,28 @@
+
+<template id="viewLogin">
+  <div class="section">
+    <div class="columns">
+      <div class="column"></div>
+      <div class="column has-text-centered">
+        <h2 class="title">請登入</h2>
+        <div class="field">
+          <div class="control has-icons-left has-icons-right">
+            <input class="input is-medium" type="email" placeholder="email" v-model="user.email"/><span class="icon is-left"><i class="fa fa-envelope"></i></span>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control has-icons-left has-icons-right">
+            <input class="input is-medium" type="password" placeholder="password" v-model="user.password"/><span class="icon is-left"><i class="fa fa-lock"></i></span>
+          </div>
+        </div>
+        <div class="field"><a class="button is-primary" @click="signIn">登入</a></div>
+        <transition name="expand">
+          <div class="notification" v-if="message">
+            <button class="delete" @click="message=''"></button><span>{{message}}</span>
+          </div>
+        </transition>
+      </div>
+      <div class="column"></div>
+    </div>
+  </div>
+</template>

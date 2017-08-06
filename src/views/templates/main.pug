@@ -1,6 +1,3 @@
-#app.container
-  router-view
-
 template#viewMain
   .section.has-text-centered
     .block(v-if='!ready')
@@ -15,9 +12,3 @@ template#viewMain
           .field
             router-link.button(v-if='auth.currentUser', to='/bonds') 測試資料
             router-link.button(v-else, to='/login') 登入
-
-template#pageNotFound
-  .section.has-text-centered
-    .block
-      h3.invalid-info 找不到資料
-      i.fa.fa-exclamation-triangle

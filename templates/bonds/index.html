@@ -1,0 +1,178 @@
+
+<template id="indexBonds">
+  <div class="section">
+    <div class="block">
+      <h2 class="title is-pulled-left">
+        <router-link class="icon back" to="/"><i class="fa fa-university"></i></router-link><span>票卷列表</span>
+      </h2>
+      <transition name="fade"><a class="button is-primary is-small add-bond" v-if="ready" @click="adding"><i class="fa fa-plus"></i></a></transition>
+      <transition name="fade">
+        <router-link class="button is-pulled-right" v-if="ready" to="/logout">登出</router-link>
+      </transition>
+    </div>
+    <div class="block table-wrapper" @click="pickedBond = {}">
+      <table class="table" :class="{slim : slim}">
+        <thead>
+          <tr>
+            <th @click="slim = !slim"><i class="fa fa-caret-square-o-left"></i></th>
+            <th></th>
+            <th>姓名</th>
+            <template v-if="!slim">
+              <th>資訊</th>
+              <th>email</th>
+              <th>電話</th>
+              <th>匯款號碼</th>
+              <th>匯款時間</th>
+              <th>備註</th>
+            </template>
+            <th>已付款</th>
+            <th>報到</th>
+            <th></th>
+            <template v-if="!slim">
+              <th></th>
+            </template>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(bond, idx) in bonds" :class="{'is-selected' : bonds.length &gt; 1 &amp;&amp; pickedBond == bond}" @click.stop="pickedBond = bond">
+            <td>{{idx + 1}}</td>
+            <td><a @click="producing(bond)"><i class="fa fa-qrcode"></i></a></td>
+            <td>
+              <router-link :to="{ name: 'check-bond', params: { id: bond['.key'] }, query: {mode: $route.query.mode}}">{{bond.name}}</router-link>
+            </td>
+            <template v-if="!slim">
+              <td>{{bond.info}}</td>
+              <td><a :href="getMailTo(bond)">{{bond.email}}</a></td>
+              <td>{{bond.phone}}</td>
+              <td>{{bond.code}}</td>
+              <td>{{bond.commitTime}}</td>
+              <td>{{bond.memo}}</td>
+            </template>
+            <td><i class="fa fa-check" v-if="bond.checked"></i></td>
+            <td><i class="fa fa-check" v-if="bond.checkIn" :title="bond.checkInTime"></i></td>
+            <td><a @click="editing(bond)"><i class="fa fa-pencil"></i></a></td>
+            <template v-if="!slim">
+              <td><a @click="deleting(bond)"><i class="fa fa-trash"></i></a></td>
+            </template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <transition name="fade">
+      <div class="block" v-if="bonds.length &gt; 0"><a class="button is-small download-all" @click="producingAll"><i class="fa fa-download"></i><span>下載全部 QRcode</span></a></div>
+    </transition>
+    <edit-bond-modal :bond="pickedBond" ref="edit-bond-modal"></edit-bond-modal>
+    <delete-bond-modal :bond="pickedBond" ref="delete-bond-modal"></delete-bond-modal>
+    <qr-view-modal :bond="pickedBond" ref="qr-view-modal"></qr-view-modal>
+  </div>
+</template>
+<template id="editBondModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card has-text-centered">
+      <div class="box has-text-centered">
+        <div class="block">
+          <h3 class="modal-card-title">{{isNew ? '新增票卷' : '編輯票卷'}}</h3>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="姓名" v-model="bondData.name"/><span class="icon is-left"><i class="fa fa-user"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="資訊" v-model="bondData.info"/><span class="icon is-left"><i class="fa fa-info-circle"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="email" v-model="bondData.email"/><span class="icon is-left"><i class="fa fa-envelope"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="電話" v-model="bondData.phone"/><span class="icon is-left"><i class="fa fa-phone"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="帳號末五碼" v-model="bondData.code"/><span class="icon is-left"><i class="fa fa-credit-card"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="匯款時間" v-model="bondData.commitTime"/><span class="icon is-left"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <textarea class="textarea" placeholder="備註" v-model="bondData.memo" @keydown="autosize"></textarea>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column"><span>付款</span>
+            <label class="switch">
+              <input type="checkbox" v-model="bondData.checked"/>
+              <div class="slider"></div>
+            </label>
+          </div>
+          <div class="column"><span>報到</span>
+            <label class="switch">
+              <input type="checkbox" v-model="bondData.checkIn"/>
+              <div class="slider"></div>
+            </label>
+          </div>
+          <div class="column box-foot"><a class="button is-primary" v-if="isNew" @click="create">新增</a><a class="button is-primary" v-else="v-else" @click="update">儲存</a><a class="button" @click="isOpen = false">取消</a></div>
+        </div>
+        <transition name="expand">
+          <div class="notification" v-if="message">
+            <button class="delete" @click="message=''"></button><span>{{message}}</span>
+          </div>
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>
+<template id="deleteBondModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card narrow">
+      <div class="box has-text-centered">
+        <div class="block">
+          <h3 class="modal-card-title">確認刪除？</h3>
+        </div>
+        <div class="block">
+          <div class="field">
+            <h3 class="title">{{bond.name}}</h3>
+          </div>
+          <div class="field"><span>{{bond.info}}</span></div>
+        </div>
+        <div class="box-foot"><a class="button is-danger" @click="destroy">刪除</a><a class="button" @click="isOpen = false">取消</a></div>
+      </div>
+    </div>
+  </div>
+</template>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.9.0/js/canvas-to-blob.min.js"></script>
+<template id="qrViewModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card qr-wrapper">
+      <div class="box">
+        <div class="block qr-code">
+          <canvas id="qrCode"></canvas>
+        </div>
+        <div class="box-foot"><a class="button is-primary" @click="download"><i class="fa fa-download"></i><span>儲存</span></a><a class="button" @click="isOpen = false">取消</a></div>
+      </div>
+    </div>
+  </div>
+</template>
+<script src="js/components/edit_bond_modal.js"></script>
+<script src="js/components/delete_bond_modal.js"></script>
+<script src="js/components/qr_view_modal.js"></script>

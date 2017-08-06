@@ -1,4 +1,4 @@
-const appLogin = {
+ResponseJS = {
   template: '#viewLogin',
 
   data () {
@@ -39,14 +39,5 @@ const appLogin = {
       this.$forceUpdate()
       this.checkAuth()
     })
-  }
-}
-
-const appLogout = {
-  template: '<p>Logout</p>',
-
-  created () {
-    firebase.auth().signOut()
-    this.$router.push('/')
   }
 }

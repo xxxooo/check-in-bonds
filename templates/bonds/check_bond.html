@@ -1,0 +1,50 @@
+
+<template id="checkBond">
+  <div class="section has-text-centered">
+    <div class="block" v-if="!ready">
+      <div class="spinner"></div>
+    </div>
+    <transition name="fade">
+      <div v-if="ready">
+        <div class="column" v-if="isAuthed">
+          <template v-if="bond.name">
+            <div class="block">
+              <router-link class="icon back" :to="{name: 'bonds', query: {mode: $route.query.mode}}"><i class="fa fa-list"></i></router-link>
+            </div>
+            <div class="block">
+              <div class="field">
+                <h3 class="title">{{bond.name}}</h3>
+              </div>
+              <div class="field"><span>{{bond.info}}</span></div>
+            </div>
+            <transition name="fade">
+              <div class="block" v-if="bond.checked"><a class="button is-large is-primary" v-if="!bond.checkIn" @click="checkIn"><span>報到</span></a><a class="button is-large is-info" v-else-if="isClicked"><i class="fa fa-check"></i><span>完成</span></a><a class="button is-large is-warning" v-else="v-else"><i class="fa fa-check-circle"></i><span>已報到</span></a>
+                <div class="check-in-time" v-if="bond.checkInTime">{{bond.checkInTime}}</div>
+              </div>
+              <div class="block" v-else="v-else"><a class="button" @click="commit">未付款</a></div>
+            </transition>
+          </template>
+          <template v-else-if="loaded">
+            <h3 class="invalid-info">找不到資料</h3><i class="fa fa-exclamation-triangle"></i>
+          </template>
+          <template v-else="v-else">
+            <div class="block">
+              <div class="spinner"></div>
+            </div>
+          </template>
+          <transition name="expand">
+            <div class="notification" v-if="message">
+              <button class="delete" @click="message=''"></button><span>{{message}}</span>
+            </div>
+          </transition>
+        </div>
+        <div class="column has-text-centered" v-else="v-else">
+          <div class="blick">
+            <h3 class="title">請先登入</h3>
+            <router-link class="button" to="/login">登入</router-link>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>

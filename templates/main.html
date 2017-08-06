@@ -1,0 +1,24 @@
+
+<template id="viewMain">
+  <div class="section has-text-centered">
+    <div class="block" v-if="!ready">
+      <div class="spinner"></div>
+    </div>
+    <transition name="fade">
+      <div v-if="ready">
+        <div class="block">
+          <h1 class="title">Hello!</h1>
+        </div>
+        <div class="block main-functions">
+          <div class="field" v-if="isAdmin">
+            <router-link class="button" :to="{name: 'bonds', query: {mode: 'pvt'}}">管理票卷</router-link>
+          </div>
+          <div class="field">
+            <router-link class="button" v-if="auth.currentUser" to="/bonds">測試資料</router-link>
+            <router-link class="button" v-else="v-else" to="/login">登入</router-link>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>

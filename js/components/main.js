@@ -1,6 +1,6 @@
 // main page
 //
-const main = {
+ResponseJS = {
   template: '#viewMain',
 
   data () {
@@ -18,10 +18,4 @@ const main = {
       this.$forceUpdate()
     })
   }
-}
-
-// 404 page
-//
-const pageNotFound = {
-  template: '#pageNotFound'
 }

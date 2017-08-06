@@ -66,3 +66,11 @@ template#indexBonds
     edit-bond-modal(:bond='pickedBond', ref='edit-bond-modal')
     delete-bond-modal(:bond='pickedBond', ref='delete-bond-modal')
     qr-view-modal(:bond='pickedBond', ref='qr-view-modal')
+
+
+include ./edit_bond_modal.pug
+include ./delete_bond_modal.pug
+include ./qr_view_modal.pug
+script(src="js/components/edit_bond_modal.js")
+script(src="js/components/delete_bond_modal.js")
+script(src="js/components/qr_view_modal.js")
