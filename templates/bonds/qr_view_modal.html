@@ -1,0 +1,16 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.9.0/js/canvas-to-blob.min.js"></script>
+<template id="qrViewModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card qr-wrapper">
+      <div class="box">
+        <div class="block qr-code">
+          <canvas id="qrCode"></canvas>
+        </div>
+        <div class="box-foot"><a class="button is-primary" @click="download"><i class="fa fa-download"></i><span>儲存</span></a><a class="button" @click="isOpen = false">取消</a></div>
+      </div>
+    </div>
+  </div>
+</template>

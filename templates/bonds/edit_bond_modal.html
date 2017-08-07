@@ -1,0 +1,74 @@
+
+<template id="editBondModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card has-text-centered">
+      <div class="box has-text-centered">
+        <div class="block">
+          <h3 class="modal-card-title">{{isNew ? '新增票卷' : '編輯票卷'}}</h3>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="姓名" v-model="bondData.name"/><span class="icon is-left"><i class="fa fa-user"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="資訊" v-model="bondData.info"/><span class="icon is-left"><i class="fa fa-info-circle"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="email" v-model="bondData.email"/><span class="icon is-left"><i class="fa fa-envelope"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="電話" v-model="bondData.phone"/><span class="icon is-left"><i class="fa fa-phone"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="帳號末五碼" v-model="bondData.code"/><span class="icon is-left"><i class="fa fa-credit-card"></i></span>
+            </div>
+          </div>
+          <div class="column">
+            <div class="control has-icons-left">
+              <input class="input" type="text" placeholder="匯款時間" v-model="bondData.commitTime"/><span class="icon is-left"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <textarea class="textarea" placeholder="備註" v-model="bondData.memo" @keydown="autosize"></textarea>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column"><span>付款</span>
+            <label class="switch">
+              <input type="checkbox" v-model="bondData.checked"/>
+              <div class="slider"></div>
+            </label>
+          </div>
+          <div class="column"><span>報到</span>
+            <label class="switch">
+              <input type="checkbox" v-model="bondData.checkIn"/>
+              <div class="slider"></div>
+            </label>
+          </div>
+          <div class="column box-foot"><a class="button is-primary" v-if="isNew" @click="create">新增</a><a class="button is-primary" v-else="v-else" @click="update">儲存</a><a class="button" @click="isOpen = false">取消</a></div>
+        </div>
+        <transition name="expand">
+          <div class="notification" v-if="message">
+            <button class="delete" @click="message=''"></button><span>{{message}}</span>
+          </div>
+        </transition>
+      </div>
+    </div>
+  </div>
+</template>

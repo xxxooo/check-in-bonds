@@ -11,12 +11,20 @@ function getComponent (resolve, jsPath, tmplPath) {
   }
 
   if (tmplPath) {
-    $.get(tmplPath).done((template) => {
-      $('body').append(template)
+    Vue.http.get(tmplPath).then(response => {
+      let dom = document.createElement("div")
+      dom.innerHTML = response.body
+      document.getElementsByTagName('body')[0].appendChild(dom)
       checkLoaded()
-    })
+    }, response => {
+      console.log("ERROR: failed to load template")
+    });
   }
-  $.getScript(jsPath).done(checkLoaded)
+
+  let script = document.createElement('script')
+  script.src = jsPath
+  document.getElementsByTagName('head')[0].appendChild(script)
+  script.onload = () => { checkLoaded() }
 }
 
 

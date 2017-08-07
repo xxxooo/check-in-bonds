@@ -1,0 +1,20 @@
+
+<template id="deleteBondModal">
+  <div class="modal" :class="{'is-active' : isOpen}">
+    <div class="modal-background"></div>
+    <div class="modal-card narrow">
+      <div class="box has-text-centered">
+        <div class="block">
+          <h3 class="modal-card-title">確認刪除？</h3>
+        </div>
+        <div class="block">
+          <div class="field">
+            <h3 class="title">{{bond.name}}</h3>
+          </div>
+          <div class="field"><span>{{bond.info}}</span></div>
+        </div>
+        <div class="box-foot"><a class="button is-danger" @click="destroy">刪除</a><a class="button" @click="isOpen = false">取消</a></div>
+      </div>
+    </div>
+  </div>
+</template>
