@@ -1,6 +1,6 @@
 
 function getComponent (resolve, jsPath, tmplPath) {
-  let isLoaded = false
+  let isLoaded = !tmplPath
 
   function checkLoaded () {
     if (isLoaded) {
